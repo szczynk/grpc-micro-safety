@@ -1,0 +1,1487 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Method API",
+    "version": "0.0.1"
+  },
+  "tags": [
+    {
+      "name": "MethodService"
+    },
+    {
+      "name": "PolicyService"
+    },
+    {
+      "name": "RoleService"
+    },
+    {
+      "name": "ServiceService"
+    },
+    {
+      "name": "UserService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/auth/change-email": {
+      "post": {
+        "summary": "Change email a user",
+        "description": "Use this API to change email a user",
+        "operationId": "UserService_ChangeEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbChangeEmailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbChangeEmailRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "Logout",
+        "description": "Use this API to logout",
+        "operationId": "UserService_Logout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbLogoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbLogoutRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "summary": "Get User Data",
+        "description": "Use this API to get user data",
+        "operationId": "UserService_GetMe",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbGetMeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "UserService"
+        ]
+      },
+      "patch": {
+        "summary": "Update user by his token",
+        "description": "Use this API to update user",
+        "operationId": "UserService_UpdateMe",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbUpdateMeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbUpdateMeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/auth/refresh-token": {
+      "post": {
+        "summary": "Renew Access Token",
+        "description": "Use this API to renew access token",
+        "operationId": "UserService_RefreshAccessToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbRefreshAccessTokenResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbRefreshAccessTokenRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/methods": {
+      "get": {
+        "summary": "Find Methods",
+        "description": "Use this API to find methods",
+        "operationId": "MethodService_FindMethods",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbFindMethodsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "method",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "5"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "created_at:desc"
+          }
+        ],
+        "tags": [
+          "MethodService"
+        ]
+      },
+      "post": {
+        "summary": "Create a new method",
+        "description": "Use this API to create a new method",
+        "operationId": "MethodService_CreateMethod",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbCreateMethodResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbCreateMethodRequest"
+            }
+          }
+        ],
+        "tags": [
+          "MethodService"
+        ]
+      }
+    },
+    "/methods/{id}": {
+      "delete": {
+        "summary": "Delete method by id",
+        "description": "Use this API to delete method by id",
+        "operationId": "MethodService_DeleteMethodById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbDeleteMethodByIdResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "MethodService"
+        ]
+      }
+    },
+    "/policies": {
+      "get": {
+        "summary": "Find Policies",
+        "description": "Use this API to find policies",
+        "operationId": "PolicyService_FindPolicies",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbFindPoliciesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "service",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "PolicyService"
+        ]
+      },
+      "post": {
+        "summary": "Create a new policy",
+        "description": "Use this API to create a new policy",
+        "operationId": "PolicyService_CreatePolicy",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbCreatePolicyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbCreatePolicyRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PolicyService"
+        ]
+      }
+    },
+    "/policies/{role}/{service}/{method}": {
+      "delete": {
+        "summary": "Delete policy",
+        "description": "Use this API to delete policy",
+        "operationId": "PolicyService_DeletePolicy",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbDeletePolicyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "role",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "service",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "method",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "PolicyService"
+        ]
+      }
+    },
+    "/roles": {
+      "get": {
+        "summary": "Find Roles",
+        "description": "Use this API to find roles",
+        "operationId": "RoleService_FindRoles",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbFindRolesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "5"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "created_at:desc"
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      },
+      "post": {
+        "summary": "Create a new role",
+        "description": "Use this API to create a new role",
+        "operationId": "RoleService_CreateRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbCreateRoleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbCreateRoleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    },
+    "/roles/{id}": {
+      "delete": {
+        "summary": "Delete role by id",
+        "description": "Use this API to delete role by id",
+        "operationId": "RoleService_DeleteRoleById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbDeleteRoleByIdResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "RoleService"
+        ]
+      }
+    },
+    "/services": {
+      "get": {
+        "summary": "Find Services",
+        "description": "Use this API to find services",
+        "operationId": "ServiceService_FindServices",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbFindServicesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "service",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "5"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "created_at:desc"
+          }
+        ],
+        "tags": [
+          "ServiceService"
+        ]
+      },
+      "post": {
+        "summary": "Create a new service",
+        "description": "Use this API to create a new service",
+        "operationId": "ServiceService_CreateService",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbCreateServiceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbCreateServiceRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ServiceService"
+        ]
+      }
+    },
+    "/services/{id}": {
+      "delete": {
+        "summary": "Delete service by id",
+        "description": "Use this API to delete service by id",
+        "operationId": "ServiceService_DeleteServiceById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbDeleteServiceByIdResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "ServiceService"
+        ]
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Find Users",
+        "description": "Use this API to find users",
+        "operationId": "UserService_FindUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbFindUsersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "verified",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "5"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "created_at:desc"
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      },
+      "post": {
+        "summary": "Create a new user",
+        "description": "Use this API to create a new user",
+        "operationId": "UserService_CreateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbCreateUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbCreateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Find User By Id",
+        "description": "Use this API to find user by id",
+        "operationId": "UserService_FindUserById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbFindUserByIdResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      },
+      "delete": {
+        "summary": "Delete user by id",
+        "description": "Use this API to delete user by id",
+        "operationId": "UserService_DeleteUserById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbDeleteUserByIdResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      },
+      "patch": {
+        "summary": "Update user by id",
+        "description": "Use this API to update user by id",
+        "operationId": "UserService_UpdateUserById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbUpdateUserByIdResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "johndee"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "johndee@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "test1234"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "user"
+                },
+                "avatar": {
+                  "type": "string",
+                  "example": "https://avatars.dicebear.com/api/open-peeps/johndee.svg"
+                },
+                "verified": {
+                  "type": "boolean",
+                  "example": "true"
+                }
+              },
+              "title": "Update User By ID"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "pbChangeEmailRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "johndee@gmail.com"
+        }
+      },
+      "title": "Change Email"
+    },
+    "pbChangeEmailResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/pbUser"
+        },
+        "message": {
+          "type": "string",
+          "example": "We sent an email with a verification code to johndee@gmail.com."
+        }
+      }
+    },
+    "pbCreateMethodRequest": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string"
+        }
+      },
+      "title": "Create Method"
+    },
+    "pbCreateMethodResponse": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "$ref": "#/definitions/pbMethod"
+        }
+      }
+    },
+    "pbCreatePolicyRequest": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "example": "user"
+        },
+        "service": {
+          "type": "string",
+          "example": "pb.UserService"
+        },
+        "method": {
+          "type": "string",
+          "example": "GetMe"
+        }
+      },
+      "title": "Create Policy"
+    },
+    "pbCreatePolicyResponse": {
+      "type": "object",
+      "properties": {
+        "policy": {
+          "$ref": "#/definitions/pbPolicy"
+        }
+      }
+    },
+    "pbCreateRoleRequest": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "example": "user"
+        }
+      },
+      "title": "Create Role"
+    },
+    "pbCreateRoleResponse": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "$ref": "#/definitions/pbRole"
+        }
+      }
+    },
+    "pbCreateServiceRequest": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "type": "string",
+          "example": "pb.UserService"
+        }
+      },
+      "title": "Create Service"
+    },
+    "pbCreateServiceResponse": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "$ref": "#/definitions/pbService"
+        }
+      }
+    },
+    "pbCreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "johndee"
+        },
+        "email": {
+          "type": "string",
+          "example": "johndee@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "test1234"
+        },
+        "role": {
+          "type": "string",
+          "example": "user"
+        },
+        "avatar": {
+          "type": "string",
+          "example": "https://avatars.dicebear.com/api/open-peeps/johndee.svg"
+        },
+        "verified": {
+          "type": "boolean",
+          "example": "true"
+        }
+      },
+      "title": "Create User"
+    },
+    "pbCreateUserResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/pbUser"
+        },
+        "message": {
+          "type": "string",
+          "example": "We sent an email with a verification code to johndee@gmail.com."
+        }
+      }
+    },
+    "pbDeleteMethodByIdResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Method deleted successfully"
+        }
+      }
+    },
+    "pbDeletePolicyResponse": {
+      "type": "object",
+      "properties": {
+        "res": {
+          "type": "boolean",
+          "example": "true"
+        }
+      }
+    },
+    "pbDeleteRoleByIdResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Role deleted successfully"
+        }
+      }
+    },
+    "pbDeleteServiceByIdResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Service deleted successfully"
+        }
+      }
+    },
+    "pbDeleteUserByIdResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "User deleted successfully"
+        }
+      }
+    },
+    "pbFindMethodsResponse": {
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "type": "integer",
+          "format": "int64",
+          "example": "10"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int64",
+          "example": "2"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "example": "1"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int64",
+          "example": "5"
+        },
+        "hasMore": {
+          "type": "boolean",
+          "example": "true"
+        },
+        "methods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/pbMethod"
+          }
+        }
+      }
+    },
+    "pbFindPoliciesResponse": {
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "type": "integer",
+          "format": "int64",
+          "example": "10"
+        },
+        "policies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/pbPolicy"
+          }
+        }
+      }
+    },
+    "pbFindRolesResponse": {
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "type": "integer",
+          "format": "int64",
+          "example": "10"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int64",
+          "example": "2"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "example": "1"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int64",
+          "example": "5"
+        },
+        "hasMore": {
+          "type": "boolean",
+          "example": "true"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/pbRole"
+          }
+        }
+      }
+    },
+    "pbFindServicesResponse": {
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "type": "integer",
+          "format": "int64",
+          "example": "10"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int64",
+          "example": "2"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "example": "1"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int64",
+          "example": "5"
+        },
+        "hasMore": {
+          "type": "boolean",
+          "example": "true"
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/pbService"
+          }
+        }
+      }
+    },
+    "pbFindUserByIdResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/pbUser"
+        }
+      }
+    },
+    "pbFindUsersResponse": {
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "type": "integer",
+          "format": "int64",
+          "example": "10"
+        },
+        "totalPages": {
+          "type": "integer",
+          "format": "int64",
+          "example": "2"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "example": "1"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int64",
+          "example": "5"
+        },
+        "hasMore": {
+          "type": "boolean",
+          "example": "true"
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/pbUser"
+          }
+        }
+      }
+    },
+    "pbGetMeResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/pbUser"
+        }
+      }
+    },
+    "pbLogoutRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string",
+          "example": "v2.local.f5C8V6oKlwssi4pM2xYRiKb-9x_KNNIq5J0sjxID0PncuAICGkMATlaoIXarDge4VXMArwTONCgCdjkuVgMtr5wu8gTNwKCTxIHjJOsPKqI-uXSSb7JcxlrTw1Ls4Gz_2QDyYewxJ4Tt4EO9ezSojwE9kXsgfFOWxMe_8gkLna7_Zm3gpGssk_sRAmpavYHwpj8hvkiTwGnsq_W4DWjCZQbiva-KKbHTCklxcn3cofpniDbZ34rHkLODc8_BdEUjaMNF3VU2YVhQJxGh4FITkm_advds70s1bm1Ei1Te4DIuW9u49nHwZVTs4X11e6SbXy7UrCeFzfoZ4419uFN3RQLgw1zUSTqa6rsFy9msHZOH-Bnb5VihnUaoIEeEfLsUIWLIP5kBHcleSfljwGNq0oztqwmaRJIlN2hyTJxy0X5gSp3Z174150y-ZyckE8Np4B5X5D0BELD43zMO3FrPi3RUWm6ywFiF5PBMCBRJjNgvv-RodX24WA.U3pjenluayBJbml0aWF0aXZlIEVudGVycHJpc2Vz"
+        }
+      },
+      "title": "Logout"
+    },
+    "pbLogoutResponse": {
+      "type": "object"
+    },
+    "pbMethod": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "example": "1"
+        },
+        "method": {
+          "type": "string",
+          "example": "CreateMethod"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "pbPolicy": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "example": "user"
+        },
+        "service": {
+          "type": "string",
+          "example": "pb.UserService"
+        },
+        "method": {
+          "type": "string",
+          "example": "GetMe"
+        }
+      }
+    },
+    "pbRefreshAccessTokenRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string",
+          "example": "v2.local.f5C8V6oKlwssi4pM2xYRiKb-9x_KNNIq5J0sjxID0PncuAICGkMATlaoIXarDge4VXMArwTONCgCdjkuVgMtr5wu8gTNwKCTxIHjJOsPKqI-uXSSb7JcxlrTw1Ls4Gz_2QDyYewxJ4Tt4EO9ezSojwE9kXsgfFOWxMe_8gkLna7_Zm3gpGssk_sRAmpavYHwpj8hvkiTwGnsq_W4DWjCZQbiva-KKbHTCklxcn3cofpniDbZ34rHkLODc8_BdEUjaMNF3VU2YVhQJxGh4FITkm_advds70s1bm1Ei1Te4DIuW9u49nHwZVTs4X11e6SbXy7UrCeFzfoZ4419uFN3RQLgw1zUSTqa6rsFy9msHZOH-Bnb5VihnUaoIEeEfLsUIWLIP5kBHcleSfljwGNq0oztqwmaRJIlN2hyTJxy0X5gSp3Z174150y-ZyckE8Np4B5X5D0BELD43zMO3FrPi3RUWm6ywFiF5PBMCBRJjNgvv-RodX24WA.U3pjenluayBJbml0aWF0aXZlIEVudGVycHJpc2Vz"
+        }
+      },
+      "title": "Refresh Access Token"
+    },
+    "pbRefreshAccessTokenResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "example": "v2.local.f5C8V6oKlwssi4pM2xYRiKb-9x_KNNIq5J0sjxID0PncuAICGkMATlaoIXarDge4VXMArwTONCgCdjkuVgMtr5wu8gTNwKCTxIHjJOsPKqI-uXSSb7JcxlrTw1Ls4Gz_2QDyYewxJ4Tt4EO9ezSojwE9kXsgfFOWxMe_8gkLna7_Zm3gpGssk_sRAmpavYHwpj8hvkiTwGnsq_W4DWjCZQbiva-KKbHTCklxcn3cofpniDbZ34rHkLODc8_BdEUjaMNF3VU2YVhQJxGh4FITkm_advds70s1bm1Ei1Te4DIuW9u49nHwZVTs4X11e6SbXy7UrCeFzfoZ4419uFN3RQLgw1zUSTqa6rsFy9msHZOH-Bnb5VihnUaoIEeEfLsUIWLIP5kBHcleSfljwGNq0oztqwmaRJIlN2hyTJxy0X5gSp3Z174150y-ZyckE8Np4B5X5D0BELD43zMO3FrPi3RUWm6ywFiF5PBMCBRJjNgvv-RodX24WA.U3pjenluayBJbml0aWF0aXZlIEVudGVycHJpc2Vz"
+        },
+        "accessTokenExpiresAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "pbRole": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "example": "1"
+        },
+        "role": {
+          "type": "string",
+          "example": "user"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "pbService": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "example": "1"
+        },
+        "service": {
+          "type": "string",
+          "example": "pb.UserService"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "pbUpdateMeRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "johndee"
+        },
+        "avatar": {
+          "type": "string",
+          "example": "https://avatars.dicebear.com/api/open-peeps/johndee.svg"
+        }
+      },
+      "title": "Update Me"
+    },
+    "pbUpdateMeResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/pbUser"
+        }
+      }
+    },
+    "pbUpdateUserByIdResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/pbUser"
+        }
+      }
+    },
+    "pbUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "2438ac3c-37eb-4902-adef-ed16b4431030"
+        },
+        "username": {
+          "type": "string",
+          "example": "johndee"
+        },
+        "email": {
+          "type": "string",
+          "example": "johndee@gmail.com"
+        },
+        "role": {
+          "type": "string",
+          "example": "user"
+        },
+        "avatar": {
+          "type": "string",
+          "example": "https://avatars.dicebear.com/api/open-peeps/johndee.svg"
+        },
+        "verified": {
+          "type": "boolean",
+          "example": "true"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
+}

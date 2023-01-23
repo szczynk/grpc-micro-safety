@@ -1,0 +1,552 @@
+version: "3"
+
+networks:
+  safety-net:
+    driver: bridge
+
+volumes:
+  postgres1:
+  postgres2:
+  postgres3:
+  pgadmin:
+  redis:
+  kafka1_data:
+  kafka1_secrets:
+  zoo1_data:
+  zoo1_log:
+  zoo1_secrets:
+  minio:
+  mailhog:
+  jaeger:
+  jaeger_tmp:
+  alertmanager_data:
+  prometheus_data:
+  grafana_data:
+
+
+services:
+  grpc-safety_gateway:
+    image: szczynk/grpc-safety_gateway
+    container_name: grpc-safety_gateway
+    ports:
+      - 5000:5000
+    expose:
+      - 7000
+    environment:
+      - MODE=${APP_MODE:-development}
+      - AUTH_SERVICE_ENDPOINT=grpc-safety_auth:5001
+      - USER_SERVICE_ENDPOINT=grpc-safety_user:5002
+      - SAFETY_SERVICE_ENDPOINT=grpc-safety_core:5004
+      - REDIS_ADDRESS=redis:6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-admin}
+      - CASBIN_PGHOST=postgres3
+      - CASBIN_PGPORT=5432
+      - CASBIN_PGPASSWORD=${PG3_PASSWORD:-postgres}
+      - CASBIN_URL=casbin-server:50051
+      - METRICS_URL=grpc-safety_gateway:7000
+      - JAEGER_HOST=jaeger:6831
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESSKEYID=${MINIO_USER:-minio}
+      - MINIO_SECRETACCESSKEY=${MINIO_PASSWORD:-minio-secret}
+    depends_on:
+      redis:
+        condition: service_healthy
+      casbin-server:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      grpc-safety_auth:
+        condition: service_started
+      grpc-safety_user:
+        condition: service_started
+      grpc-safety_core:
+        condition: service_started
+
+  grpc-safety_auth:
+    image: szczynk/grpc-safety_auth
+    container_name: grpc-safety_auth
+    ports:
+      - 6001:6001
+    expose:
+      - 5001
+      - 7001
+    environment:
+      - MODE=${APP_MODE:-development}
+      - PGHOST=postgres2
+      - PGPORT=5432
+      - PGPASSWORD=${PG2_PASSWORD:-postgres}
+      - REDIS_ADDRESS=redis:6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-admin}
+      - CASBIN_PGHOST=postgres3
+      - CASBIN_PGPORT=5432
+      - CASBIN_PGPASSWORD=${PG3_PASSWORD:-postgres}
+      - CASBIN_URL=casbin-server:50051
+      - METRICS_URL=grpc-safety_auth:7001
+      - JAEGER_HOST=jaeger:6831
+      - KAFKA_BROKERS=kafka1:9092
+    depends_on:
+      postgres2:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      casbin-server:
+        condition: service_healthy
+      kafka1:
+        condition: service_healthy
+
+  grpc-safety_user:
+    image: szczynk/grpc-safety_user
+    container_name: grpc-safety_user
+    ports:
+      - 6002:6002
+    expose:
+      - 5002
+      - 7002
+    environment:
+      - MODE=${APP_MODE:-development}
+      - PGHOST=postgres2
+      - PGPORT=5432
+      - PGPASSWORD=${PG2_PASSWORD:-postgres}
+      - REDIS_ADDRESS=redis:6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-admin}
+      - CASBIN_PGHOST=postgres3
+      - CASBIN_PGPORT=5432
+      - CASBIN_PGPASSWORD=${PG3_PASSWORD:-postgres}
+      - CASBIN_URL=casbin-server:50051
+      - METRICS_URL=grpc-safety_user:7002
+      - JAEGER_HOST=jaeger:6831
+      - KAFKA_BROKERS=kafka1:9092
+    depends_on:
+      postgres2:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      casbin-server:
+        condition: service_healthy
+      kafka1:
+        condition: service_healthy
+
+  grpc-safety_mail:
+    image: szczynk/grpc-safety_mail
+    container_name: grpc-safety_mail
+    expose:
+      - 7003
+    environment:
+      - MODE=${APP_MODE:-development}
+      - PGHOST=postgres2
+      - PGPORT=5432
+      - PGPASSWORD=${PG2_PASSWORD:-postgres}
+      - REDIS_ADDRESS=redis:6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-admin}
+      - SMTP_HOST=mailhog
+      - SMTP_PORT=1025
+      - SMTP_SENDER_IDENTITY=Safety
+      - SMTP_SENDER_EMAIL=admin@safety.com
+      - METRICS_URL=grpc-safety_mail:7003
+      - JAEGER_HOST=jaeger:6831
+      - KAFKA_BROKERS=kafka1:9092
+    depends_on:
+      postgres2:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+      kafka1:
+        condition: service_healthy
+
+  grpc-safety_core:
+    image: szczynk/grpc-safety_core
+    container_name: grpc-safety_core
+    ports:
+      - 6004:6004
+    expose:
+      - 5004
+      - 7004
+    environment:
+      - MODE=${APP_MODE:-development}
+      - PGHOST=postgres1
+      - PGPASSWORD=${PG1_PASSWORD:-postgres}
+      - REDIS_ADDRESS=redis:6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-admin}
+      - CASBIN_PGHOST=postgres3
+      - CASBIN_PGPORT=5432
+      - CASBIN_PGPASSWORD=${PG3_PASSWORD:-postgres}
+      - CASBIN_URL=casbin-server:50051
+      - METRICS_URL=grpc-safety_core:7004
+      - JAEGER_HOST=jaeger:6831
+      - KAFKA_BROKERS=kafka1:9092
+    depends_on:
+      postgres1:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      casbin-server:
+        condition: service_healthy
+      kafka1:
+        condition: service_healthy
+
+  postgres1:
+    image: szczynk/postgres_cron:15.1
+    container_name: postgres1
+    volumes:
+      - ./postgres/safety:/docker-entrypoint-initdb.d/
+      - postgres1:/var/lib/postgresql/data
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${PG1_PASSWORD:-postgres}
+      POSTGRES_DB: safety
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready --username postgres" ]
+      interval: 30s
+      timeout: 30s
+      retries: 10
+      start_period: 1s
+
+  postgres2:
+    image: szczynk/postgres_cron:15.1
+    container_name: postgres2
+    volumes:
+      - ./postgres/account:/docker-entrypoint-initdb.d/
+      - postgres2:/var/lib/postgresql/data
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${PG2_PASSWORD:-postgres}
+      POSTGRES_DB: account
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready --username postgres" ]
+      interval: 30s
+      timeout: 30s
+      retries: 10
+      start_period: 1s
+
+  postgres3:
+    image: szczynk/postgres_cron:15.1
+    container_name: postgres3
+    volumes:
+      - ./postgres/casbin:/docker-entrypoint-initdb.d/
+      - postgres3:/var/lib/postgresql/data
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${PG3_PASSWORD:-postgres}
+      POSTGRES_DB: casbin
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready --username postgres" ]
+      interval: 30s
+      timeout: 30s
+      retries: 10
+      start_period: 1s
+
+  pgadmin:
+    image: dpage/pgadmin4:6.19
+    container_name: pgadmin
+    volumes:
+      - ./pgadmin4/servers.json:/pgadmin4/servers.json
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - 5050:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+    depends_on:
+      postgres1:
+        condition: service_healthy
+      postgres2:
+        condition: service_healthy
+      postgres3:
+        condition: service_healthy
+
+  casbin-server:
+    image: szczynk/casbin-service
+    container_name: casbin-server
+    expose:
+      - 50051
+    healthcheck:
+      test: [ "CMD-SHELL", "nc -vz casbin-server 50051" ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 1s
+
+  redis:
+    image: redis:7.0.7-alpine
+    container_name: redis
+    entrypoint: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-admin}
+    expose:
+      - 6379
+    volumes:
+      - redis:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  zoo1:
+    image: confluentinc/cp-zookeeper:7.3.0
+    hostname: zoo1
+    container_name: zoo1
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_SERVERS: zoo1:2888:3888
+    volumes:
+      - type: volume
+        source: zoo1_data
+        target: /var/lib/zookeeper/data
+      - type: volume
+        source: zoo1_log
+        target: /var/lib/zookeeper/log
+      - type: volume
+        source: zoo1_secrets
+        target: /etc/zookeeper/secrets
+    healthcheck:
+      test: [ "CMD-SHELL", "nc -vz localhost 2181" ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 1s
+
+  kafka1:
+    image: confluentinc/cp-kafka:7.3.0
+    hostname: kafka1
+    container_name: kafka1
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+      - "9999:9999"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka1:19092,EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092,DOCKER://host.docker.internal:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,DOCKER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
+      KAFKA_BROKER_ID: 1
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: ${DOCKER_HOST_IP:-127.0.0.1}
+      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+    volumes:
+      - type: volume
+        source: kafka1_data
+        target: /var/lib/kafka/data
+      - type: volume
+        source: kafka1_secrets
+        target: /etc/kafka/secrets
+    depends_on:
+      - zoo1
+    healthcheck:
+      test: [ "CMD-SHELL", "nc -vz localhost 9092" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9001:9001"
+    expose:
+      - 9000
+    volumes:
+      - minio:/data
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER:-minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-minio-secret}
+    command: server --console-address ":9001" /data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://minio:9000/minio/health/live"
+        ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+      start_period: 1s
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: 'mailhog'
+    ports:
+      - 8025:8025
+    expose:
+      - 1025
+    volumes:
+      - ./mailhog/auth:/auth
+      - mailhog:/maildir
+    environment:
+      MH_STORAGE: maildir
+      MH_AUTH_FILE: /auth
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    ports:
+      - "16686:16686"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "4317:4317"
+      - "4318:4318"
+      - "14250:14250"
+      - "14268:14268"
+      - "14269:14269"
+      - "9411:9411"
+    volumes:
+      - jaeger:/badger
+      - jaeger_tmp:/tmp
+    environment:
+      COLLECTOR_ZIPKIN_HOST_PORT: ":9411"
+      COLLECTOR_OTLP_ENABLED: "true"
+      SPAN_STORAGE_TYPE: badger
+      BADGER_EPHEMERAL: "false"
+      BADGER_DIRECTORY_VALUE: /badger/data
+      BADGER_DIRECTORY_KEY: /badger/key
+
+  prometheus:
+    image: prom/prometheus:v2.41.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    expose:
+      - 9090
+    networks:
+      - safety-net
+    depends_on:
+      - grpc-safety_gateway
+      - grpc-safety_auth
+      - grpc-safety_user
+      - grpc-safety_mail
+      - grpc-safety_core
+    labels:
+      org.label-schema.group: "monitoring"
+
+  alertmanager:
+    image: prom/alertmanager:v0.25.0
+    container_name: alertmanager
+    volumes:
+      - ./alertmanager:/etc/alertmanager
+      - alertmanager_data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    restart: unless-stopped
+    expose:
+      - 9093
+    networks:
+      - safety-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+  nodeexporter:
+    image: prom/node-exporter:v1.5.0
+    container_name: nodeexporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    restart: unless-stopped
+    expose:
+      - 9100
+    networks:
+      - safety-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.46.0
+    container_name: cadvisor
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      #- /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
+    restart: unless-stopped
+    expose:
+      - 8080
+    networks:
+      - safety-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+  grafana:
+    image: grafana/grafana:9.3.2
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    environment:
+      - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    restart: unless-stopped
+    expose:
+      - 3000
+    networks:
+      - safety-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+  pushgateway:
+    image: prom/pushgateway:v1.5.1
+    container_name: pushgateway
+    restart: unless-stopped
+    expose:
+      - 9091
+    networks:
+      - safety-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+  caddy:
+    image: caddy:2.6.2
+    container_name: caddy
+    ports:
+      - "3000:3000"
+      - "8080:8080"
+      - "9090:9090"
+      - "9093:9093"
+      - "9091:9091"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+    environment:
+      - ADMIN_USER=${ADMIN_USER:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - ADMIN_PASSWORD_HASH=${ADMIN_PASSWORD_HASH:-$2a$14$1l.IozJx7xQRVmlkEQ32OeEEfP5mRxTpbDTCTcXRqn19gXD8YK1pO}
+    restart: unless-stopped
+    networks:
+      - safety-net
+    labels:
+      org.label-schema.group: "monitoring"

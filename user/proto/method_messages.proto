@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "./;pb";
+
+message Method {
+  uint32 id = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  string method = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"CreateMethod\""}
+  ];
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
+}
+
+
+// Create Method
+message CreateMethodRequest{
+  string method = 1;
+}
+
+message CreateMethodResponse {
+  Method method = 1;
+}
+
+// Delete Method By ID
+message DeleteMethodByIdRequest { 
+  uint32 id = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+}
+
+message DeleteMethodByIdResponse {
+  string message = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Method deleted successfully\""}
+  ];
+}
+
+
+// Find Methods
+message FindMethodsRequest {
+  string method = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"CreateMethod\""}
+  ];
+
+  uint32 page = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 limit = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {default: "5", example: "\"10\""}
+  ];
+  string sort = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {default: "created_at:desc", example: "\"created_at:asc\""}
+  ];
+}
+
+message FindMethodsResponse {
+  uint32 total_count = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"10\""}
+  ];
+  uint32 total_pages = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"2\""}
+  ];
+  uint32 page = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 limit = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"5\""}
+  ];
+  bool has_more = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"true\""}
+  ];
+
+  repeated Method methods = 6;
+}

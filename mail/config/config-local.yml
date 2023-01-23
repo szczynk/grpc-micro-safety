@@ -1,0 +1,52 @@
+server:
+  Name: mail
+  AppVersion: 1.0.0
+  Mode: development
+
+logger:
+  Encoding: console
+  Level: debug
+
+postgres:
+  Host: localhost
+  Port: 15432
+  User: postgres
+  Password: postgres
+  DBName: account
+  SSLMode: disable
+
+redis:
+  Address: localhost:6379
+  Password: admin
+  DB: 0
+  MinIdleConns: 200
+  PoolSize: 12000
+  PoolTimeout: 240
+
+kafka:
+  brokers: [ "localhost:9092" ]
+  groupID: user_mail_consumer
+  initTopics: false
+
+refreshToken:
+  MaxAge: 24h
+
+accessToken:
+  Expire: 3h
+
+smtp:
+  Host: 127.0.0.1
+  Port: 1025
+  User: ""
+  Pass: ""
+  SenderIdentity: Winow
+  SenderEmail: winow@admin.com
+
+metrics:
+  Url: localhost:7003
+  ServiceName: grpc_mail
+
+jaeger:
+  Host: localhost:6831
+  ServiceName: grpc_mail
+  LogSpans: false

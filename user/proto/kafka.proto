@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+
+option go_package = "./;pb";
+
+message UserKafka {
+  string id = 1 [(validate.rules).string.uuid = true];
+  string username =2 [(validate.rules).string.min_len = 5];
+  string email = 3 [(validate.rules).string.email = true];
+  string password = 4 ;
+  string role = 5;
+  string avatar = 6;
+  bool verified = 7;
+  string verification_code = 8;
+  google.protobuf.Timestamp verified_at =9;
+  string password_reset_token = 10;
+  google.protobuf.Timestamp password_reset_at = 11;
+}

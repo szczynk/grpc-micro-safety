@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package pb;
+
+import "validate/validate.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "user_messages.proto";
+
+option go_package = "./;pb";
+
+message Workspace {
+  uint32 office_id = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  string user_id = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {format: "uuid", example: "\"2438ac3c-37eb-4902-adef-ed16b4431030\""}
+  ];
+}
+
+
+// Create Workspace
+message CreateWorkspaceRequest{
+  uint32 office_id = 1 [
+    (validate.rules).uint32.gt = 0,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  string user_id = 2 [
+    (validate.rules).string.uuid = true,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {format: "uuid", example: "\"2438ac3c-37eb-4902-adef-ed16b4431030\""}
+  ];
+}
+
+message CreateWorkspaceResponse {
+  Workspace workspace = 1;
+}
+
+// Delete Workspace By ID
+message DeleteWorkspaceByIdRequest { 
+  string user_id = 1 [
+    (validate.rules).string.uuid = true,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {format: "uuid", example: "\"2438ac3c-37eb-4902-adef-ed16b4431030\""}
+  ];
+}
+
+message DeleteWorkspaceByIdResponse {
+  string message = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Workspace deleted successfully\""}
+  ];
+}
+
+
+// Find Workspaces
+message FindWorkspacesRequest {
+  uint32 office_id = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  string username = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee\""}
+  ];
+  string email = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee@gmail.com\""}
+  ];
+  string role = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"user\""}
+  ];
+  string verified = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"true\""}
+  ];
+
+  uint32 page = 6 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 limit = 7 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {default: "5", example: "\"10\""}
+  ];
+  string sort = 8 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {default: "created_at:desc", example: "\"created_at:asc\""}
+  ];
+}
+
+message FindWorkspacesResponse {
+  uint32 total_count = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"10\""}
+  ];
+  uint32 total_pages = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"2\""}
+  ];
+  uint32 page = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 limit = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"5\""}
+  ];
+  bool has_more = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"true\""}
+  ];
+
+  repeated User users = 6;
+}

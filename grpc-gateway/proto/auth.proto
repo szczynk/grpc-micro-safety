@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "user_messages.proto";
+
+option go_package = "./;pb";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+		title: "Auth API";
+		version: "0.0.1";
+	};
+  security_definitions: {
+    security: {
+      key: "bearer"
+      value: {
+        type: TYPE_API_KEY
+        in: IN_HEADER
+        name: "Authorization"
+        description: "Authentication token, prefixed by Bearer: Bearer <token>"
+      }
+    }
+  };
+  security: {
+    security_requirement: {
+      key: "bearer"
+    }
+  };
+};
+
+service AuthService{
+  rpc Register (RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/auth/register"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to register a new user";
+      summary: "Register a new user";
+      security: {};
+    };
+  };
+  rpc Login (LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/auth/login"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to login user and get access token & refresh token";
+      summary: "Login user";
+      security: {};
+    };
+  };
+  rpc ForgotPassword (ForgotPasswordRequest) returns (ForgotPasswordResponse) {
+    option (google.api.http) = {
+			post: "/auth/forgot-password"
+			body: "*"
+		};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to send reset password token by user email";
+      summary: "Send Reset Password Token";
+      security: {};
+    };
+  };
+  rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse) {
+    option (google.api.http) = {
+			post: "/auth/reset-password/{reset_token}"
+			body: "*"
+		};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to reset password";
+      summary: "Reset Password";
+      security: {};
+    };
+  };
+  
+
+  rpc VerifyEmail (VerifyEmailRequest) returns (VerifyEmailResponse) {
+    option (google.api.http) = {
+			get: "/auth/verify-email/{code}"
+		};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to verify user email";
+      summary: "Verify User Email";
+      security: {};
+    };
+  };
+}

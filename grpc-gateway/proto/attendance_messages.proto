@@ -1,0 +1,223 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "./;pb";
+
+message Attendance {
+  uint32 id = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  string user_id = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {format: "uuid", example: "\"2438ac3c-37eb-4902-adef-ed16b4431030\""}
+  ];
+  uint32 schedule_id = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  string image_url = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"https://avatars.dicebear.com/api/open-peeps/johndee.svg\""}
+  ];
+  string description = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Application for a work from office permit\""}
+  ];
+  string admin_username = 6 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"admin\""}
+  ];
+  string status = 7 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"pending\""}
+  ];
+  google.protobuf.Timestamp status_at = 8;
+  string status_info = 9 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Sip\""}
+  ];
+  double check_temperature = 10 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"37.5\""}
+  ];
+	string check_status = 11 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"pending\""}
+  ];
+	google.protobuf.Timestamp check_in = 12;
+	google.protobuf.Timestamp check_out = 13;
+  google.protobuf.Timestamp created_at = 14;
+  google.protobuf.Timestamp updated_at = 15;
+}
+
+message AttendanceDetail {
+  uint32 id = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  string user_id = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {format: "uuid", example: "\"2438ac3c-37eb-4902-adef-ed16b4431030\""}
+  ];
+  string user_username = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee\""}
+  ];
+  string user_avatar = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"https://avatars.dicebear.com/api/open-peeps/johndee.svg\""}
+  ];
+  uint32 schedule_id = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  google.protobuf.Timestamp schedule_date = 6;
+  string office_id = 7 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  string office_name = 8 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Main\""}
+  ];
+  string image_url = 9 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"https://avatars.dicebear.com/api/open-peeps/johndee.svg\""}
+  ];
+  string description = 10 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Application for a work from office permit\""}
+  ];
+  string admin_username = 11 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"admin\""}
+  ];
+  string status = 12 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"pending\""}
+  ];
+  google.protobuf.Timestamp status_at = 13;
+  string status_info = 14 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Sip\""}
+  ];
+  double check_temperature = 15 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"37.5\""}
+  ];
+	string check_status = 16 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"pending\""}
+  ];
+	google.protobuf.Timestamp check_in = 17;
+	google.protobuf.Timestamp check_out = 18;
+  google.protobuf.Timestamp created_at = 19;
+  google.protobuf.Timestamp updated_at = 20;
+}
+
+
+// Create Attendance
+message CreateAttendanceRequest{
+  string user_id = 1 [
+    (validate.rules).string.uuid = true,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {format: "uuid", example: "\"2438ac3c-37eb-4902-adef-ed16b4431030\""}
+  ];
+  uint32 schedule_id = 2 [
+    (validate.rules).uint32.gt = 0,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  string description = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Application for a work from office permit\""}
+  ];
+  string imageUrl = 4 [
+    (validate.rules).string.min_len = 8,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"https://avatars.dicebear.com/api/open-peeps/johndee.svg\""}
+  ];
+}
+
+message CreateAttendanceResponse {
+  Attendance attendance = 1;
+}
+
+// Update Attendance By ID
+message UpdateAttendanceByIdRequest{
+  uint32 id = 1 [
+    (validate.rules).uint32.gt = 0,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 schedule_id = 2 [
+    (validate.rules).uint32.gt = 0,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  string admin_username = 3 [
+    (validate.rules).string.min_len = 3,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"admin\""}
+  ];
+  string status = 4 [
+    (validate.rules).string = {in: ["approved", "pending", "rejected"]},
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"approved\""}
+  ];
+  string status_info = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Sip\""}
+  ];
+}
+
+message UpdateAttendanceByIdResponse {
+  Attendance attendance = 1;
+}
+
+// Delete Attendance By ID
+message DeleteAttendanceByIdRequest { 
+  uint32 id = 1 [
+    (validate.rules).uint32.gt = 0,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+}
+
+message DeleteAttendanceByIdResponse {
+  string message = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Attendance deleted successfully\""}
+  ];
+}
+
+
+// Find Attendances
+message FindAttendancesRequest {
+  string user_id = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {format: "uuid", example: "\"2438ac3c-37eb-4902-adef-ed16b4431030\""}
+  ];
+  uint32 schedule_id = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  string admin_username = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"admin\""}
+  ];
+  string status = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"approved\""}
+  ];
+
+  uint32 page = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 limit = 6 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {default: "5", example: "\"10\""}
+  ];
+  string sort = 7 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {default: "created_at:desc", example: "\"created_at:asc\""}
+  ];
+}
+
+message FindAttendancesResponse {
+  uint32 total_count = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"10\""}
+  ];
+  uint32 total_pages = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"2\""}
+  ];
+  uint32 page = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 limit = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"5\""}
+  ];
+  bool has_more = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"true\""}
+  ];
+
+  repeated AttendanceDetail attendances = 6;
+}
+
+// Find Attendance By ID
+message FindAttendanceByIdRequest {
+  uint32 id = 1 [
+    (validate.rules).uint32.gt = 0,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+}
+
+message FindAttendanceByIdResponse {
+  AttendanceDetail attendance = 1;
+}
+

@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "policy_messages.proto";
+
+option go_package = "./;pb";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+		title: "Policy API";
+		version: "0.0.1";
+	};
+  security_definitions: {
+    security: {
+      key: "bearer"
+      value: {
+        type: TYPE_API_KEY
+        in: IN_HEADER
+        name: "Authorization"
+        description: "Authentication token, prefixed by Bearer: Bearer <token>"
+      }
+    }
+  };
+  security: {
+    security_requirement: {
+      key: "bearer"
+    }
+  };
+};
+
+service PolicyService{
+  rpc CreatePolicy (CreatePolicyRequest) returns (CreatePolicyResponse) {
+    option (google.api.http) = {
+      post: "/policies"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to create a new policy";
+      summary: "Create a new policy";
+    };
+  };
+  rpc DeletePolicy (DeletePolicyRequest) returns (DeletePolicyResponse) {
+    option (google.api.http) = {
+      delete: "/policies/{role}/{service}/{method}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to delete policy";
+      summary: "Delete policy";
+    };
+  };
+
+  rpc FindPolicies (FindPoliciesRequest)returns (FindPoliciesResponse){
+    option (google.api.http) = {
+			get: "/policies"
+		};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to find policies";
+      summary: "Find Policies";
+    };
+  }
+}

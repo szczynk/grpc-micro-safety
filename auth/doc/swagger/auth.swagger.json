@@ -1,0 +1,373 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Auth API",
+    "version": "0.0.1"
+  },
+  "tags": [
+    {
+      "name": "AuthService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/auth/forgot-password": {
+      "post": {
+        "summary": "Send Reset Password Token",
+        "description": "Use this API to send reset password token by user email",
+        "operationId": "AuthService_ForgotPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbForgotPasswordResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbForgotPasswordRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login user",
+        "description": "Use this API to login user and get access token \u0026 refresh token",
+        "operationId": "AuthService_Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbLoginResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbLoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "description": "Use this API to register a new user",
+        "operationId": "AuthService_Register",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbRegisterResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pbRegisterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/auth/reset-password/{resetToken}": {
+      "post": {
+        "summary": "Reset Password",
+        "description": "Use this API to reset password",
+        "operationId": "AuthService_ResetPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbResetPasswordResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "resetToken",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string",
+                  "example": "test1234"
+                }
+              },
+              "title": "ResetPassword"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/auth/verify-email/{code}": {
+      "get": {
+        "summary": "Verify User Email",
+        "description": "Use this API to verify user email",
+        "operationId": "AuthService_VerifyEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pbVerifyEmailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "pbForgotPasswordRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "johndee@gmail.com"
+        }
+      },
+      "title": "ForgotPassword"
+    },
+    "pbForgotPasswordResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "We sent an email with a password reset token to johndee@gmail.com."
+        }
+      }
+    },
+    "pbLoginRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "johndee@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "test1234"
+        }
+      },
+      "title": "Login"
+    },
+    "pbLoginResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/pbUser"
+        },
+        "accessToken": {
+          "type": "string",
+          "example": "v2.local.f5C8V6oKlwssi4pM2xYRiKb-9x_KNNIq5J0sjxID0PncuAICGkMATlaoIXarDge4VXMArwTONCgCdjkuVgMtr5wu8gTNwKCTxIHjJOsPKqI-uXSSb7JcxlrTw1Ls4Gz_2QDyYewxJ4Tt4EO9ezSojwE9kXsgfFOWxMe_8gkLna7_Zm3gpGssk_sRAmpavYHwpj8hvkiTwGnsq_W4DWjCZQbiva-KKbHTCklxcn3cofpniDbZ34rHkLODc8_BdEUjaMNF3VU2YVhQJxGh4FITkm_advds70s1bm1Ei1Te4DIuW9u49nHwZVTs4X11e6SbXy7UrCeFzfoZ4419uFN3RQLgw1zUSTqa6rsFy9msHZOH-Bnb5VihnUaoIEeEfLsUIWLIP5kBHcleSfljwGNq0oztqwmaRJIlN2hyTJxy0X5gSp3Z174150y-ZyckE8Np4B5X5D0BELD43zMO3FrPi3RUWm6ywFiF5PBMCBRJjNgvv-RodX24WA.U3pjenluayBJbml0aWF0aXZlIEVudGVycHJpc2Vz"
+        },
+        "refreshToken": {
+          "type": "string",
+          "example": "v2.local.f5C8V6oKlwssi4pM2xYRiKb-9x_KNNIq5J0sjxID0PncuAICGkMATlaoIXarDge4VXMArwTONCgCdjkuVgMtr5wu8gTNwKCTxIHjJOsPKqI-uXSSb7JcxlrTw1Ls4Gz_2QDyYewxJ4Tt4EO9ezSojwE9kXsgfFOWxMe_8gkLna7_Zm3gpGssk_sRAmpavYHwpj8hvkiTwGnsq_W4DWjCZQbiva-KKbHTCklxcn3cofpniDbZ34rHkLODc8_BdEUjaMNF3VU2YVhQJxGh4FITkm_advds70s1bm1Ei1Te4DIuW9u49nHwZVTs4X11e6SbXy7UrCeFzfoZ4419uFN3RQLgw1zUSTqa6rsFy9msHZOH-Bnb5VihnUaoIEeEfLsUIWLIP5kBHcleSfljwGNq0oztqwmaRJIlN2hyTJxy0X5gSp3Z174150y-ZyckE8Np4B5X5D0BELD43zMO3FrPi3RUWm6ywFiF5PBMCBRJjNgvv-RodX24WA.U3pjenluayBJbml0aWF0aXZlIEVudGVycHJpc2Vz"
+        },
+        "accessTokenExpiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "refreshTokenExpiresAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "pbRegisterRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "johndee"
+        },
+        "email": {
+          "type": "string",
+          "example": "johndee@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "test1234"
+        }
+      },
+      "title": "Register"
+    },
+    "pbRegisterResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/pbUser"
+        },
+        "message": {
+          "type": "string",
+          "example": "We sent an email with a verification code to johndee@gmail.com."
+        }
+      }
+    },
+    "pbResetPasswordResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Reset password successful"
+        }
+      }
+    },
+    "pbUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "2438ac3c-37eb-4902-adef-ed16b4431030"
+        },
+        "username": {
+          "type": "string",
+          "example": "johndee"
+        },
+        "email": {
+          "type": "string",
+          "example": "johndee@gmail.com"
+        },
+        "role": {
+          "type": "string",
+          "example": "user"
+        },
+        "avatar": {
+          "type": "string",
+          "example": "https://avatars.dicebear.com/api/open-peeps/johndee.svg"
+        },
+        "verified": {
+          "type": "boolean",
+          "example": "true"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "pbVerifyEmailResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Email verified successfully"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

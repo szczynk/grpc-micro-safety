@@ -1,0 +1,328 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "./;pb";
+
+
+message User {
+  string id = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {format: "uuid", example: "\"2438ac3c-37eb-4902-adef-ed16b4431030\""}
+  ];
+  string username = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee\""}
+  ];
+  string email = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee@gmail.com\""}
+  ];
+  string role = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"user\""}
+  ];
+  string avatar = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"https://avatars.dicebear.com/api/open-peeps/johndee.svg\""}
+  ];
+  bool verified = 6 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"true\""}
+  ];
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+// =============================== auth ===============================
+
+// Register
+message RegisterRequest {
+  string username = 1 [
+    (validate.rules).string.min_len = 5, 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee\""}
+  ];
+  string email = 2 [
+    (validate.rules).string.email = true, 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee@gmail.com\""}
+  ];
+  string password = 3 [
+    (validate.rules).string.min_len = 8, 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"test1234\""}
+  ];
+}
+
+message RegisterResponse {
+  User user = 1;
+  string message = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"We sent an email with a verification code to johndee@gmail.com.\""}
+  ];
+}
+
+// Login
+message LoginRequest {
+  string email = 1 [
+    (validate.rules).string.email = true, 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee@gmail.com\""}
+  ];
+  string password = 2 [
+    (validate.rules).string.min_len = 8, 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"test1234\""}
+  ];
+}
+
+message LoginResponse {
+  User user = 1;
+  string access_token = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"v2.local.f5C8V6oKlwssi4pM2xYRiKb-9x_KNNIq5J0sjxID0PncuAICGkMATlaoIXarDge4VXMArwTONCgCdjkuVgMtr5wu8gTNwKCTxIHjJOsPKqI-uXSSb7JcxlrTw1Ls4Gz_2QDyYewxJ4Tt4EO9ezSojwE9kXsgfFOWxMe_8gkLna7_Zm3gpGssk_sRAmpavYHwpj8hvkiTwGnsq_W4DWjCZQbiva-KKbHTCklxcn3cofpniDbZ34rHkLODc8_BdEUjaMNF3VU2YVhQJxGh4FITkm_advds70s1bm1Ei1Te4DIuW9u49nHwZVTs4X11e6SbXy7UrCeFzfoZ4419uFN3RQLgw1zUSTqa6rsFy9msHZOH-Bnb5VihnUaoIEeEfLsUIWLIP5kBHcleSfljwGNq0oztqwmaRJIlN2hyTJxy0X5gSp3Z174150y-ZyckE8Np4B5X5D0BELD43zMO3FrPi3RUWm6ywFiF5PBMCBRJjNgvv-RodX24WA.U3pjenluayBJbml0aWF0aXZlIEVudGVycHJpc2Vz\""}
+  ];
+  string refresh_token = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"v2.local.f5C8V6oKlwssi4pM2xYRiKb-9x_KNNIq5J0sjxID0PncuAICGkMATlaoIXarDge4VXMArwTONCgCdjkuVgMtr5wu8gTNwKCTxIHjJOsPKqI-uXSSb7JcxlrTw1Ls4Gz_2QDyYewxJ4Tt4EO9ezSojwE9kXsgfFOWxMe_8gkLna7_Zm3gpGssk_sRAmpavYHwpj8hvkiTwGnsq_W4DWjCZQbiva-KKbHTCklxcn3cofpniDbZ34rHkLODc8_BdEUjaMNF3VU2YVhQJxGh4FITkm_advds70s1bm1Ei1Te4DIuW9u49nHwZVTs4X11e6SbXy7UrCeFzfoZ4419uFN3RQLgw1zUSTqa6rsFy9msHZOH-Bnb5VihnUaoIEeEfLsUIWLIP5kBHcleSfljwGNq0oztqwmaRJIlN2hyTJxy0X5gSp3Z174150y-ZyckE8Np4B5X5D0BELD43zMO3FrPi3RUWm6ywFiF5PBMCBRJjNgvv-RodX24WA.U3pjenluayBJbml0aWF0aXZlIEVudGVycHJpc2Vz\""}
+  ];
+  google.protobuf.Timestamp access_token_expires_at = 4;
+  google.protobuf.Timestamp refresh_token_expires_at = 5;
+}
+
+// ForgotPassword
+message ForgotPasswordRequest { 
+  string email = 1 [
+    (validate.rules).string.email = true,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee@gmail.com\""}
+  ]; 
+}
+
+message ForgotPasswordResponse {
+  string message = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"We sent an email with a password reset token to johndee@gmail.com.\""}
+  ];
+}
+
+// ResetPassword
+message ResetPasswordRequest { 
+  string reset_token = 1; 
+  string password = 2 [
+    (validate.rules).string.min_len = 8, 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"test1234\""}
+  ];
+}
+
+message ResetPasswordResponse {
+  string message = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Reset password successful\""}
+  ];
+}
+
+// VerifyEmail
+message VerifyEmailRequest { 
+  string code = 1; 
+}
+
+message VerifyEmailResponse {
+  string message = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Email verified successfully\""}
+  ];
+}
+
+// =============================== user ===============================
+
+// Update Me
+message UpdateMeRequest {
+  optional string username = 1 [
+    (validate.rules).string.min_len = 5, 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee\""}
+  ];
+  optional string avatar = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"https://avatars.dicebear.com/api/open-peeps/johndee.svg\""}
+  ];
+}
+
+message UpdateMeResponse {
+  User user = 1;
+}
+
+// Change Email
+message ChangeEmailRequest {
+  string email = 1 [
+    (validate.rules).string.email = true,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee@gmail.com\""}
+  ]; 
+}
+
+message ChangeEmailResponse {
+  User user = 1;
+  string message = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"We sent an email with a verification code to johndee@gmail.com.\""}
+  ];
+}
+
+// Refresh Access Token
+message RefreshAccessTokenRequest {
+  string refresh_token = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"v2.local.f5C8V6oKlwssi4pM2xYRiKb-9x_KNNIq5J0sjxID0PncuAICGkMATlaoIXarDge4VXMArwTONCgCdjkuVgMtr5wu8gTNwKCTxIHjJOsPKqI-uXSSb7JcxlrTw1Ls4Gz_2QDyYewxJ4Tt4EO9ezSojwE9kXsgfFOWxMe_8gkLna7_Zm3gpGssk_sRAmpavYHwpj8hvkiTwGnsq_W4DWjCZQbiva-KKbHTCklxcn3cofpniDbZ34rHkLODc8_BdEUjaMNF3VU2YVhQJxGh4FITkm_advds70s1bm1Ei1Te4DIuW9u49nHwZVTs4X11e6SbXy7UrCeFzfoZ4419uFN3RQLgw1zUSTqa6rsFy9msHZOH-Bnb5VihnUaoIEeEfLsUIWLIP5kBHcleSfljwGNq0oztqwmaRJIlN2hyTJxy0X5gSp3Z174150y-ZyckE8Np4B5X5D0BELD43zMO3FrPi3RUWm6ywFiF5PBMCBRJjNgvv-RodX24WA.U3pjenluayBJbml0aWF0aXZlIEVudGVycHJpc2Vz\""}
+  ];
+}
+
+message RefreshAccessTokenResponse {
+  string access_token = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"v2.local.f5C8V6oKlwssi4pM2xYRiKb-9x_KNNIq5J0sjxID0PncuAICGkMATlaoIXarDge4VXMArwTONCgCdjkuVgMtr5wu8gTNwKCTxIHjJOsPKqI-uXSSb7JcxlrTw1Ls4Gz_2QDyYewxJ4Tt4EO9ezSojwE9kXsgfFOWxMe_8gkLna7_Zm3gpGssk_sRAmpavYHwpj8hvkiTwGnsq_W4DWjCZQbiva-KKbHTCklxcn3cofpniDbZ34rHkLODc8_BdEUjaMNF3VU2YVhQJxGh4FITkm_advds70s1bm1Ei1Te4DIuW9u49nHwZVTs4X11e6SbXy7UrCeFzfoZ4419uFN3RQLgw1zUSTqa6rsFy9msHZOH-Bnb5VihnUaoIEeEfLsUIWLIP5kBHcleSfljwGNq0oztqwmaRJIlN2hyTJxy0X5gSp3Z174150y-ZyckE8Np4B5X5D0BELD43zMO3FrPi3RUWm6ywFiF5PBMCBRJjNgvv-RodX24WA.U3pjenluayBJbml0aWF0aXZlIEVudGVycHJpc2Vz\""}
+  ];
+  google.protobuf.Timestamp access_token_expires_at = 2;
+}
+
+// Logout
+message LogoutRequest {
+  string refresh_token = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"v2.local.f5C8V6oKlwssi4pM2xYRiKb-9x_KNNIq5J0sjxID0PncuAICGkMATlaoIXarDge4VXMArwTONCgCdjkuVgMtr5wu8gTNwKCTxIHjJOsPKqI-uXSSb7JcxlrTw1Ls4Gz_2QDyYewxJ4Tt4EO9ezSojwE9kXsgfFOWxMe_8gkLna7_Zm3gpGssk_sRAmpavYHwpj8hvkiTwGnsq_W4DWjCZQbiva-KKbHTCklxcn3cofpniDbZ34rHkLODc8_BdEUjaMNF3VU2YVhQJxGh4FITkm_advds70s1bm1Ei1Te4DIuW9u49nHwZVTs4X11e6SbXy7UrCeFzfoZ4419uFN3RQLgw1zUSTqa6rsFy9msHZOH-Bnb5VihnUaoIEeEfLsUIWLIP5kBHcleSfljwGNq0oztqwmaRJIlN2hyTJxy0X5gSp3Z174150y-ZyckE8Np4B5X5D0BELD43zMO3FrPi3RUWm6ywFiF5PBMCBRJjNgvv-RodX24WA.U3pjenluayBJbml0aWF0aXZlIEVudGVycHJpc2Vz\""}
+  ];
+}
+
+message LogoutResponse {}
+
+
+// GetMe
+message GetMeRequest{}
+
+message GetMeResponse {
+  User user = 1;
+}
+
+
+
+
+// Create User
+message CreateUserRequest{
+  string username = 1 [
+    (validate.rules).string.min_len = 5, 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee\""}
+  ];
+  string email = 2 [
+    (validate.rules).string.email = true, 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee@gmail.com\""}
+  ];
+  string password = 3 [
+    (validate.rules).string.min_len = 8, 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"test1234\""}
+  ];
+  string role = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"user\""}
+  ];
+  string avatar = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"https://avatars.dicebear.com/api/open-peeps/johndee.svg\""}
+  ];
+  bool verified = 6 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"true\""}
+  ];
+}
+
+message CreateUserResponse {
+  User user = 1;
+  string message = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"We sent an email with a verification code to johndee@gmail.com.\""}
+  ];
+}
+
+// Update User By ID
+message UpdateUserByIdRequest{
+  string id = 1 [
+    (validate.rules).string.uuid = true,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {format: "uuid", example: "\"2438ac3c-37eb-4902-adef-ed16b4431030\""}
+  ];
+  string username = 2 [
+    (validate.rules).string.min_len = 5, 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee\""}
+  ];
+  string email = 3 [
+    (validate.rules).string.email = true, 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee@gmail.com\""}
+  ];
+  string password = 4 [
+    (validate.rules).string.min_len = 8, 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"test1234\""}
+  ];
+  string role = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"user\""}
+  ];
+  string avatar = 6 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"https://avatars.dicebear.com/api/open-peeps/johndee.svg\""}
+  ];
+  bool verified = 7 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"true\""}
+  ];
+}
+
+message UpdateUserByIdResponse {
+  User user = 1;
+}
+
+// Delete User By ID
+message DeleteUserByIdRequest { 
+  string id = 1 [
+    (validate.rules).string.uuid = true,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {format: "uuid", example: "\"2438ac3c-37eb-4902-adef-ed16b4431030\""}
+  ];
+}
+
+message DeleteUserByIdResponse {
+  string message = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"User deleted successfully\""}
+  ];
+}
+
+
+// Find Users
+message FindUsersRequest {
+  string username = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee\""}
+  ];
+  string email = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"johndee@gmail.com\""}
+  ];
+  string role = 3 [
+    (validate.rules).string.min_len = 8, 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"user\""}
+  ];
+  string verified = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"true\""}
+  ];
+
+  uint32 page = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 limit = 6 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {default: "5", example: "\"10\""}
+  ];
+  string sort = 7 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {default: "created_at:desc", example: "\"created_at:asc\""}
+  ];
+}
+
+message FindUsersResponse {
+  uint32 total_count = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"10\""}
+  ];
+  uint32 total_pages = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"2\""}
+  ];
+  uint32 page = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 limit = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"5\""}
+  ];
+  bool has_more = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"true\""}
+  ];
+
+  repeated User users = 6;
+}
+
+// Find User By ID
+message FindUserByIdRequest {
+  string id = 1 [
+    (validate.rules).string.uuid = true,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {format: "uuid", example: "\"2438ac3c-37eb-4902-adef-ed16b4431030\""}
+  ];
+}
+
+message FindUserByIdResponse {
+  User user = 1;
+}
+

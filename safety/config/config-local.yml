@@ -1,0 +1,70 @@
+server:
+  Name: safety
+  AppVersion: 1.0.0
+  Port: :5004
+  Mode: development
+  JwtSecretKey: vdZwzfdGBIJ8133KR4fq7GRvLwEH1FI5
+  ReadTimeout: 15s
+  WriteTimeout: 15s
+  MaxConnectionIdle: 5m
+  Timeout: 15s
+  MaxConnectionAge: 5m
+  Time: 5m
+
+logger:
+  Encoding: console
+  Level: debug
+
+postgres:
+  Host: localhost
+  Port: 5432
+  User: postgres
+  Password: postgres
+  DBName: safety
+  SSLMode: disable
+
+redis:
+  Address: localhost:6379
+  Password: admin
+  DB: 2
+  MinIdleConns: 200
+  PoolSize: 12000
+  PoolTimeout: 240
+
+limiter:
+  Limit: 50-S
+
+kafka:
+  brokers: [ "localhost:9092" ]
+  groupID: user_safety_consumer
+  initTopics: false
+
+refreshToken:
+  MaxAge: 24h
+
+accessToken:
+  Expire: 3h
+
+cache:
+  Expire: 3s
+
+gateway:
+  Port: :6004
+
+# container to container must use its own domain 
+casbin:
+  PostgresHost: postgres3
+  PostgresPort: 5432
+  PostgresUser: postgres
+  PostgresPassword: postgres
+  PostgresSslmode: disable
+  Url: localhost:50051
+
+metrics:
+  Url: localhost:7004
+  ServiceName: grpc_safety
+
+jaeger:
+  Host: localhost:6831
+  ServiceName: grpc_safety
+  LogSpans: false

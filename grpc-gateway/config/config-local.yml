@@ -1,0 +1,55 @@
+server:
+  Name: gateway
+  AppVersion: 1.0.0
+  Port: :5000
+  Mode: development
+  JwtSecretKey: vdZwzfdGBIJ8133KR4fq7GRvLwEH1FI5
+  ReadTimeout: 15s
+  WriteTimeout: 15s
+
+gateway:
+  AuthServiceEndpoint: :5001
+  UserServiceEndpoint: :5002
+  SafetyServiceEndpoint: :5004
+
+redis:
+  Address: localhost:6379
+  Password: admin
+  DB: 1
+  MinIdleConns: 200
+  PoolSize: 12000
+  PoolTimeout: 240
+
+limiter:
+  Limit: 50-S
+
+logger:
+  Encoding: console
+  Level: debug
+
+metrics:
+  Url: localhost:7000
+  ServiceName: grpc_gateway
+
+jaeger:
+  Host: localhost:6831
+  ServiceName: grpc_gateway
+  LogSpans: false
+
+# container to container must use its own domain 
+casbin:
+  PostgresHost: postgres3
+  PostgresPort: 5432
+  PostgresUser: postgres
+  PostgresPassword: postgres
+  PostgresSslmode: disable
+  Url: localhost:50051
+
+minio:
+  Endpoint: localhost:9000
+  AccessKeyId: minio
+  SecretAccessKey: minio-secret
+  UseSSL: false
+  NewBucket: false
+  Bucket: safety
+  Location: us-east-1

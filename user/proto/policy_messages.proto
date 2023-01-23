@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package pb;
+
+import "validate/validate.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "./;pb";
+
+message Policy {
+  string role = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"user\""}
+  ];
+  string service = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"pb.UserService\""}
+  ];
+  string method = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"GetMe\""}
+  ];
+}
+
+
+// Create Policy
+message CreatePolicyRequest{
+  string role = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"user\""}
+  ];
+  string service = 2 [
+    (validate.rules).string.prefix = "pb.", 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"pb.UserService\""}
+  ];
+  string method = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"GetMe\""}
+  ];
+}
+
+message CreatePolicyResponse {
+  Policy policy = 1;
+}
+
+// Delete Policy By ID
+message DeletePolicyRequest { 
+  string role = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"user\""}
+  ];
+  string service = 2 [
+    (validate.rules).string.prefix = "pb.", 
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"pb.UserService\""}
+  ];
+  string method = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"GetMe\""}
+  ];
+}
+
+message DeletePolicyResponse {
+  bool res = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"true\""}
+  ];
+}
+
+
+// Find Policies
+message FindPoliciesRequest {
+  string role = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"user\""}
+  ];
+  string service = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"pb.UserService\""}
+  ];
+  string method = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"GetMe\""}
+  ];
+}
+
+message FindPoliciesResponse {
+  uint32 total_count = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"10\""}
+  ];
+
+  repeated Policy policies = 2;
+}

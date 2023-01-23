@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "certificate_messages.proto";
+
+option go_package = "./;pb";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+		title: "Certificate API";
+		version: "0.0.1";
+	};
+  security_definitions: {
+    security: {
+      key: "bearer"
+      value: {
+        type: TYPE_API_KEY
+        in: IN_HEADER
+        name: "Authorization"
+        description: "Authentication token, prefixed by Bearer: Bearer <token>"
+      }
+    }
+  };
+  security: {
+    security_requirement: {
+      key: "bearer"
+    }
+  };
+};
+
+service CertificateService{
+  rpc CreateCertificate (CreateCertificateRequest) returns (CreateCertificateResponse) {
+    option (google.api.http) = {
+      post: "/certificates"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to create a new certificate";
+      summary: "Create a new certificate";
+    };
+  };
+  rpc UpdateCertificateById (UpdateCertificateByIdRequest) returns (UpdateCertificateByIdResponse) {
+    option (google.api.http) = {
+      patch: "/certificates/{id}"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to update certificate by id";
+      summary: "Update certificate by id";
+    };
+  };
+  rpc DeleteCertificateById (DeleteCertificateByIdRequest) returns (DeleteCertificateByIdResponse) {
+    option (google.api.http) = {
+      delete: "/certificates/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to delete certificate by id";
+      summary: "Delete certificate by id";
+    };
+  };
+
+  rpc FindCertificates (FindCertificatesRequest)returns (FindCertificatesResponse){
+    option (google.api.http) = {
+			get: "/certificates"
+		};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to find certificates";
+      summary: "Find Certificates";
+    };
+  }
+  rpc FindCertificateById (FindCertificateByIdRequest) returns (FindCertificateByIdResponse) {
+    option (google.api.http) = {
+			get: "/certificates/{id}"
+		};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to find certificate by id";
+      summary: "Find Certificate By Id";
+    };
+  };
+}

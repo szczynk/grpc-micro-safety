@@ -1,0 +1,164 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "./;pb";
+
+message Schedule {
+  uint32 id = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 capacity = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"7\""}
+  ];
+  uint32 total_capacity = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"10\""}
+  ];
+  uint32 office_id = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  google.protobuf.Timestamp date = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+message ScheduleWithOffice {
+  uint32 id = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 capacity = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"7\""}
+  ];
+  uint32 total_capacity = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"10\""}
+  ];
+  uint32 office_id = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  string office_name = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Main\""}
+  ];
+  google.protobuf.Timestamp date = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+
+// Create Schedule
+message CreateScheduleRequest{
+  uint32 office_id = 1 [
+    (validate.rules).uint32.gt = 0,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 total_capacity = 2 [
+    (validate.rules).uint32.gt = 0,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"10\""}
+  ];
+  uint32 month = 3 [
+    (validate.rules).uint32 = {gte:1, lte: 12},
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 year = 4 [
+    (validate.rules).uint32 = {gte:2000, lte: 3000},
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"2023\""}
+  ];
+}
+
+message CreateScheduleResponse {
+  string message = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Schedule in a month created successfully\""}
+  ];
+}
+
+// Update Schedule By ID
+message UpdateScheduleByIdRequest{
+  uint32 id = 1 [
+    (validate.rules).uint32.gt = 0,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 total_capacity = 2 [
+    (validate.rules).uint32.gt = 0,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"10\""}
+  ];
+}
+
+message UpdateScheduleByIdResponse {
+  Schedule schedule = 1;
+}
+
+// Delete Schedule By ID
+message DeleteScheduleByIdRequest { 
+  uint32 id = 1 [
+    (validate.rules).uint32.gt = 0,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+}
+
+message DeleteScheduleByIdResponse {
+  string message = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"Schedule deleted successfully\""}
+  ];
+}
+
+
+// Find Schedules
+message FindSchedulesRequest {
+  uint32 office_id = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 month = 2 [
+    (validate.rules).uint32 = {gte:1, lte: 12},
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 year = 3 [
+    (validate.rules).uint32 = {gte:2000, lte: 3000},
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"2023\""}
+  ];
+
+  uint32 page = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 limit = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {default: "5", example: "\"10\""}
+  ];
+  string sort = 6 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {default: "created_at:desc", example: "\"created_at:asc\""}
+  ];
+}
+
+message FindSchedulesResponse {
+  uint32 total_count = 1 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"10\""}
+  ];
+  uint32 total_pages = 2 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"2\""}
+  ];
+  uint32 page = 3 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+  uint32 limit = 4 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"5\""}
+  ];
+  bool has_more = 5 [
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"true\""}
+  ];
+
+  repeated ScheduleWithOffice schedules = 6;
+}
+
+// Find Schedule By ID
+message FindScheduleByIdRequest {
+  uint32 id = 1 [
+    (validate.rules).uint32.gt = 0,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
+  ];
+}
+
+message FindScheduleByIdResponse {
+  ScheduleWithOffice schedule = 1;
+}
+

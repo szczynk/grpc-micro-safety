@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "role_messages.proto";
+
+option go_package = "./;pb";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+		title: "Role API";
+		version: "0.0.1";
+	};
+  security_definitions: {
+    security: {
+      key: "bearer"
+      value: {
+        type: TYPE_API_KEY
+        in: IN_HEADER
+        name: "Authorization"
+        description: "Authentication token, prefixed by Bearer: Bearer <token>"
+      }
+    }
+  };
+  security: {
+    security_requirement: {
+      key: "bearer"
+    }
+  };
+};
+
+service RoleService{
+  rpc CreateRole (CreateRoleRequest) returns (CreateRoleResponse) {
+    option (google.api.http) = {
+      post: "/roles"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to create a new role";
+      summary: "Create a new role";
+    };
+  };
+  rpc DeleteRoleById (DeleteRoleByIdRequest) returns (DeleteRoleByIdResponse) {
+    option (google.api.http) = {
+      delete: "/roles/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to delete role by id";
+      summary: "Delete role by id";
+    };
+  };
+
+  rpc FindRoles (FindRolesRequest)returns (FindRolesResponse){
+    option (google.api.http) = {
+			get: "/roles"
+		};
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Use this API to find roles";
+      summary: "Find Roles";
+    };
+  }
+}
