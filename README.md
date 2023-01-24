@@ -9,6 +9,14 @@
 5. [High Level Architecture Diagram](#high-level-architecture-diagram)
 6. [Features](#features)
 7. [API Scopes](#api-scopes)
+    - [Auth](#auth)
+    - [Users](#users)
+    - [Offices](#offices)
+    - [Workspaces](#workspaces)
+    - [Schedules](#schedules)
+    - [Certificates](#certificates)
+    - [Attendances](#attendances)
+    - [Checks](#checks)
 8. [Contact](#contact)
 
 ## Description
@@ -147,6 +155,7 @@ High Level Architecture Diagram for this app shown in the picture below
 | GET | /auth/verify-email/ | code | - | - | No | user, admin | Verify user's email by email |
 | POST | /auth/forgot-password | - | - | email | No | user, admin | Send reset password token by email |
 | POST | /auth/reset-password | resetToken | - | password | No | user, admin | Reset Password using reset token |
+<p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
 ### Users
 
@@ -162,6 +171,7 @@ High Level Architecture Diagram for this app shown in the picture below
 | GET | /users/ | id | - | - | Yes | admin | Find user by user's id |
 | PATCH | /users/ | id | - | username, email, password, role, avatar, verified | Yes | admin | Edit user's data by user's id |
 | DELETE | /users/ | id | - | - | Yes | admin | Delete a user by user's id |
+<p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
 ### Offices
 
@@ -172,6 +182,7 @@ High Level Architecture Diagram for this app shown in the picture below
 | GET | /offices/ | id | - | - | Yes | user, admin | Find office by office's id |
 | PATCH | /offices/ | id | - | name, detail | Yes | admin | Edit office's data by office's id |
 | DELETE | /offices/ | id | - | - | Yes | admin | Delete a office by office's id |
+<p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
 ### Workspaces
 
@@ -180,6 +191,7 @@ High Level Architecture Diagram for this app shown in the picture below
 | GET | /workspaces | - | username, email, role, verified, page, limit, sort | - | Yes | admin | Find list of users in the office |
 | POST | /workspaces | - | - | officeId, userId | Yes | admin | Insert a user into the office |
 | DELETE | /workspaces/ | userId | - | - | Yes | admin | Delete a user in the office by user's id |
+<p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
 ### Schedules
 
@@ -190,6 +202,7 @@ High Level Architecture Diagram for this app shown in the picture below
 | GET | /schedules/ | id | - | - | Yes | user, admin | Find schedule by schedule's id |
 | PATCH | /schedules/ | id | - | totalCapacity | Yes | admin | Edit schedule's total capacity by schedule's id |
 | DELETE | /schedules/ | id | - | - | Yes | admin | Delete a schedule by schedule's id |
+<p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
 ### Certificates
 
@@ -200,6 +213,7 @@ High Level Architecture Diagram for this app shown in the picture below
 | GET | /certificates/ | id | - | - | Yes | user, admin | Find certificate by certificate's id |
 | PATCH | /certificates/ | id | - | description, imageUrl, adminUsername, status, statusInfo | Yes | user, admin | Edit certificate's data by certificate's id |
 | DELETE | /certificates/ | id | - | - | Yes | admin | Delete a certificate by certificate's id |
+<p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
 ### Attendances
 
@@ -210,6 +224,7 @@ High Level Architecture Diagram for this app shown in the picture below
 | GET | /attendances/ | id | - | - | Yes | user, admin | Find attendance by attendance's id |
 | PATCH | /attendances/ | id | - | scheduleId, adminUsername, status, statusInfo | Yes | admin | Edit attendance's status by attendance's id |
 | DELETE | /attendances/ | id | - | - | Yes | admin | Delete a attendance by attendance's id |
+<p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
 ### Checks
 
