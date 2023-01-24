@@ -11,7 +11,7 @@ ADMIN_PASSWORD_HASH=$$2a$$14$$1l.IozJx7xQRVmlkEQ32OeEEfP5mRxTpbDTCTcXRqn19gXD8YK
 local-up:
 	set -e
 	@echo 'fetching 3893.4 MB of required docker images to run'
-	ADMIN_USER=$(ADMIN_USER) ADMIN_PASSWORD=$(ADMIN_PASSWORD) ADMIN_PASSWORD_HASH=$(ADMIN_PASSWORD_HASH) docker-compose -f docker-compose.local.yml -f docker-compose.monitor.local.yml up -d
+	docker-compose -f docker-compose.local.yml -f docker-compose.monitor.local.yml up -d
 	@echo 'nevermind, already fetched'
 
 .PHONY: local-down
@@ -40,16 +40,16 @@ local2-down-v:
 docker-up:
 	@set -e
 	@echo 'fetching 3893.4 MB of required docker images to run'
-	docker-compose -f docker-compose.yml up -d
+	docker-compose up -d
 	@echo 'nevermind, already fetched'
 
 .PHONY: docker-down
 docker-down:
-	docker-compose -f docker-compose.yml down
+	docker-compose down
 
 .PHONY: docker-down-v
 docker-down-v:
-	docker-compose -f docker-compose.yml down -v
+	docker-compose down -v
 
 # docker run --rm caddy:2.6.2 caddy hash-password --plaintext 'admin'
 .PHONY: caddy-hash-pw
