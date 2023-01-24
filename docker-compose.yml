@@ -32,6 +32,8 @@ services:
       - 5000:5000
     expose:
       - 7000
+    networks:
+      - safety-net
     environment:
       - MODE=${APP_MODE:-development}
       - AUTH_SERVICE_ENDPOINT=grpc-safety_auth:5001
@@ -65,11 +67,12 @@ services:
   grpc-safety_auth:
     image: szczynk/grpc-safety_auth
     container_name: grpc-safety_auth
-    ports:
-      - 6001:6001
     expose:
       - 5001
+      - 6001
       - 7001
+    networks:
+      - safety-net
     environment:
       - MODE=${APP_MODE:-development}
       - PGHOST=postgres2
@@ -97,11 +100,12 @@ services:
   grpc-safety_user:
     image: szczynk/grpc-safety_user
     container_name: grpc-safety_user
-    ports:
-      - 6002:6002
     expose:
       - 5002
+      - 6002
       - 7002
+    networks:
+      - safety-net
     environment:
       - MODE=${APP_MODE:-development}
       - PGHOST=postgres2
@@ -131,6 +135,8 @@ services:
     container_name: grpc-safety_mail
     expose:
       - 7003
+    networks:
+      - safety-net
     environment:
       - MODE=${APP_MODE:-development}
       - PGHOST=postgres2
@@ -158,11 +164,12 @@ services:
   grpc-safety_core:
     image: szczynk/grpc-safety_core
     container_name: grpc-safety_core
-    ports:
-      - 6004:6004
     expose:
       - 5004
+      - 6004
       - 7004
+    networks:
+      - safety-net
     environment:
       - MODE=${APP_MODE:-development}
       - PGHOST=postgres1
@@ -194,6 +201,8 @@ services:
       - postgres1:/var/lib/postgresql/data
     expose:
       - 5432
+    networks:
+      - safety-net
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${PG1_PASSWORD:-postgres}
@@ -213,6 +222,8 @@ services:
       - postgres2:/var/lib/postgresql/data
     expose:
       - 5432
+    networks:
+      - safety-net
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${PG2_PASSWORD:-postgres}
@@ -232,6 +243,8 @@ services:
       - postgres3:/var/lib/postgresql/data
     expose:
       - 5432
+    networks:
+      - safety-net
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${PG3_PASSWORD:-postgres}
@@ -249,8 +262,10 @@ services:
     volumes:
       - ./pgadmin4/servers.json:/pgadmin4/servers.json
       - pgadmin:/var/lib/pgadmin
-    ports:
-      - 5050:80
+    expose:
+      - 80
+    networks:
+      - safety-net
     environment:
       PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
@@ -267,6 +282,8 @@ services:
     container_name: casbin-server
     expose:
       - 50051
+    networks:
+      - safety-net
     healthcheck:
       test: [ "CMD-SHELL", "nc -vz casbin-server 50051" ]
       interval: 5s
@@ -280,6 +297,8 @@ services:
     entrypoint: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-admin}
     expose:
       - 6379
+    networks:
+      - safety-net
     volumes:
       - redis:/data
     healthcheck:
@@ -294,6 +313,8 @@ services:
     container_name: zoo1
     ports:
       - "2181:2181"
+    networks:
+      - safety-net
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVER_ID: 1
@@ -323,6 +344,8 @@ services:
       - "9092:9092"
       - "29092:29092"
       - "9999:9999"
+    networks:
+      - safety-net
     environment:
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka1:19092,EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092,DOCKER://host.docker.internal:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,DOCKER:PLAINTEXT
@@ -356,10 +379,11 @@ services:
   minio:
     image: minio/minio:latest
     container_name: minio
-    ports:
-      - "9001:9001"
     expose:
       - 9000
+      - 9001
+    networks:
+      - safety-net
     volumes:
       - minio:/data
     environment:
@@ -380,31 +404,35 @@ services:
   mailhog:
     image: mailhog/mailhog
     container_name: 'mailhog'
-    ports:
-      - 8025:8025
     expose:
       - 1025
+      - 8025
+    networks:
+      - safety-net
     volumes:
-      - ./mailhog/auth:/auth
+      # - ./mailhog/auth:/auth
       - mailhog:/maildir
     environment:
       MH_STORAGE: maildir
-      MH_AUTH_FILE: /auth
+      MH_MAILDIR_PATH: /maildir
+      # MH_AUTH_FILE: /auth
 
   jaeger:
     image: jaegertracing/all-in-one:latest
     container_name: jaeger
-    ports:
-      - "16686:16686"
-      - "6831:6831/udp"
-      - "6832:6832/udp"
-      - "5778:5778"
-      - "4317:4317"
-      - "4318:4318"
-      - "14250:14250"
-      - "14268:14268"
-      - "14269:14269"
-      - "9411:9411"
+    expose:
+      - 16686
+      - 6831/udp
+      - 6832/udp
+      - 5778
+      - 4317
+      - 4318
+      - 14250
+      - 14268
+      - 14269
+      - 9441
+    networks:
+      - safety-net
     volumes:
       - jaeger:/badger
       - jaeger_tmp:/tmp
@@ -534,6 +562,13 @@ services:
     image: caddy:2.6.2
     container_name: caddy
     ports:
+      - 6001:6001
+      - 6002:6002
+      - 6004:6004
+      - 5050:5050
+      - 9001:9001
+      - 8025:8025
+      - 16686:16686
       - "3000:3000"
       - "8080:8080"
       - "9090:9090"

@@ -5,8 +5,8 @@ global:
 
   #* Attach these labels to any time series or alerts when communicating with
   #* external systems (federation, remote storage, Alertmanager).
-  external_labels:
-    monitor: "docker-host-alpha"
+  # external_labels:
+  #   monitor: "docker-host-alpha"
 
 #* Load and evaluate rules in this file every 'evaluation_interval' seconds.
 rule_files:
@@ -38,23 +38,23 @@ scrape_configs:
     static_configs:
       - targets: ["pushgateway:9091"]
 
-  - job_name: "grpc_gateway"
+  - job_name: "grpc-safety_gateway"
     static_configs:
       - targets: ["localhost:7000"]
 
-  - job_name: "grpc_auth"
+  - job_name: "grpc-safety_auth"
     static_configs:
       - targets: ["localhost:7001"]
 
-  - job_name: "grpc_user"
+  - job_name: "grpc-safety_user"
     static_configs:
       - targets: ["localhost:7002"]
 
-  - job_name: "grpc_mail"
+  - job_name: "grpc-safety_mail"
     static_configs:
       - targets: ["localhost:7003"]
 
-  - job_name: "grpc_safety"
+  - job_name: "grpc-safety_core"
     static_configs:
       - targets: ["localhost:7004"]
 
