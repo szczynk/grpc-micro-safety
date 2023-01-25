@@ -86,7 +86,7 @@ services:
       - CASBIN_URL=casbin-server:50051
       - METRICS_URL=grpc-safety_auth:7001
       - JAEGER_HOST=jaeger:6831
-      - KAFKA_BROKERS=kafka1:9092
+      - KAFKA_BROKERS=kafka1:19092
     depends_on:
       postgres2:
         condition: service_healthy
@@ -119,7 +119,7 @@ services:
       - CASBIN_URL=casbin-server:50051
       - METRICS_URL=grpc-safety_user:7002
       - JAEGER_HOST=jaeger:6831
-      - KAFKA_BROKERS=kafka1:9092
+      - KAFKA_BROKERS=kafka1:19092
     depends_on:
       postgres2:
         condition: service_healthy
@@ -150,7 +150,7 @@ services:
       - SMTP_SENDER_EMAIL=admin@safety.com
       - METRICS_URL=grpc-safety_mail:7003
       - JAEGER_HOST=jaeger:6831
-      - KAFKA_BROKERS=kafka1:9092
+      - KAFKA_BROKERS=kafka1:19092
     depends_on:
       postgres2:
         condition: service_healthy
@@ -182,7 +182,7 @@ services:
       - CASBIN_URL=casbin-server:50051
       - METRICS_URL=grpc-safety_core:7004
       - JAEGER_HOST=jaeger:6831
-      - KAFKA_BROKERS=kafka1:9092
+      - KAFKA_BROKERS=kafka1:19092
     depends_on:
       postgres1:
         condition: service_healthy
@@ -357,9 +357,9 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_JMX_PORT: 9999
-      KAFKA_JMX_HOSTNAME: ${DOCKER_HOST_IP:-127.0.0.1}
       KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
       KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+      KAFKA_HEAP_OPTS: "-XX:MaxRAMPercentage=70.0"
     volumes:
       - type: volume
         source: kafka1_data
@@ -369,12 +369,29 @@ services:
         target: /etc/kafka/secrets
     depends_on:
       - zoo1
+    mem_limit: 512m
     healthcheck:
       test: [ "CMD-SHELL", "nc -vz localhost 9092" ]
       interval: 5s
       timeout: 5s
       retries: 20
       start_period: 5s
+
+  jmx-kafka1:
+    image: "sscaling/jmx-prometheus-exporter"
+    container_name: jmx-kafka1
+    expose:
+      - 5556
+    networks:
+      - safety-net
+    environment:
+      CONFIG_YML: "/etc/jmx_exporter/config.yml"
+      JVM_OPTS: "-Xmx128M"
+    volumes:
+      - ./jmx_exporter/config_kafka1.yml:/etc/jmx_exporter/config.yml
+    depends_on:
+      kafka1:
+        condition: service_healthy
 
   minio:
     image: minio/minio:latest
@@ -410,12 +427,12 @@ services:
     networks:
       - safety-net
     volumes:
-      # - ./mailhog/auth:/auth
-      - mailhog:/maildir
+      - type: volume
+        source: mailhog
+        target: /home/mailhog
     environment:
       MH_STORAGE: maildir
-      MH_MAILDIR_PATH: /maildir
-      # MH_AUTH_FILE: /auth
+      MH_MAILDIR_PATH: /home/mailhog
 
   jaeger:
     image: jaegertracing/all-in-one:latest
@@ -462,12 +479,6 @@ services:
       - 9090
     networks:
       - safety-net
-    depends_on:
-      - grpc-safety_gateway
-      - grpc-safety_auth
-      - grpc-safety_user
-      - grpc-safety_mail
-      - grpc-safety_core
     labels:
       org.label-schema.group: "monitoring"
 

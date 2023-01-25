@@ -186,9 +186,9 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_JMX_PORT: 9999
-      KAFKA_JMX_HOSTNAME: ${DOCKER_HOST_IP:-127.0.0.1}
       KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
       KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+      KAFKA_HEAP_OPTS: "-XX:MaxRAMPercentage=70.0"
     volumes:
       - type: volume
         source: kafka1_data
@@ -198,12 +198,29 @@ services:
         target: /etc/kafka/secrets
     depends_on:
       - zoo1
+    mem_limit: 512m
     healthcheck:
       test: [ "CMD-SHELL", "nc -vz localhost 9092" ]
       interval: 5s
       timeout: 5s
       retries: 20
       start_period: 5s
+
+  jmx-kafka1:
+    image: "sscaling/jmx-prometheus-exporter"
+    container_name: jmx-kafka1
+    expose:
+      - 5556
+    networks:
+      - safety-net
+    environment:
+      CONFIG_YML: "/etc/jmx_exporter/config.yml"
+      JVM_OPTS: "-Xmx128M"
+    volumes:
+      - ./jmx_exporter/config_kafka1.yml:/etc/jmx_exporter/config.yml
+    depends_on:
+      kafka1:
+        condition: service_healthy
 
   minio:
     image: minio/minio:latest
@@ -230,6 +247,7 @@ services:
       retries: 3
       start_period: 1s
 
+  # https://github.com/mailhog/MailHog/blob/master/docs/CONFIG.md
   mailhog:
     image: mailhog/mailhog
     container_name: 'mailhog'
@@ -239,12 +257,12 @@ services:
     networks:
       - safety-net
     volumes:
-      # - ./mailhog/auth:/auth
-      - mailhog:/maildir
+      - type: volume
+        source: mailhog
+        target: /home/mailhog
     environment:
       MH_STORAGE: maildir
-      MH_MAILDIR_PATH: /maildir
-      # MH_AUTH_FILE: /auth
+      MH_MAILDIR_PATH: /home/mailhog
 
   jaeger:
     image: jaegertracing/all-in-one:latest

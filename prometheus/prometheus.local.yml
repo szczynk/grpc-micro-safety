@@ -38,6 +38,10 @@ scrape_configs:
     static_configs:
       - targets: ["pushgateway:9091"]
 
+  - job_name: "kafka"
+    static_configs:
+      - targets: ["jmx-kafka1:5556"]
+
   - job_name: "grpc-safety_gateway"
     static_configs:
       - targets: ["localhost:7000"]
@@ -57,7 +61,6 @@ scrape_configs:
   - job_name: "grpc-safety_core"
     static_configs:
       - targets: ["localhost:7004"]
-
 #  - job_name: 'nginx'
 #    scrape_interval: 10s
 #    static_configs:

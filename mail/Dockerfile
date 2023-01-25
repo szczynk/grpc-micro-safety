@@ -24,6 +24,8 @@ COPY --from=build ./grpc-mail/grpc-mail ./grpc-mail
 
 COPY --from=build ./grpc-mail/config/config-local.yml ./config/config-local.yml
 
+COPY --from=build ./grpc-mail/internal/templates ./internal/templates
+
 EXPOSE 7003
 
 ENTRYPOINT ["/grpc-mail"]

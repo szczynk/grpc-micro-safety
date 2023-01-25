@@ -16,7 +16,7 @@ import (
 const (
 	PoolSize      = 30
 	retryAttempts = 3
-	retryDelay    = 300 * time.Millisecond
+	retryDelay    = 5 * time.Second
 )
 
 var (

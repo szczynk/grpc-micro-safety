@@ -1,4 +1,5 @@
 # credit: https://github.com/stefanprodan/dockprom
+# credit: https://github.com/streamthoughts/kafka-monitoring-stack-docker-compose
 version: '2.1'
 
 networks:
