@@ -263,3 +263,5 @@ High Level Architecture Diagram for this app shown in the picture below
   [![Linkedin Badge](https://img.shields.io/badge/-bagusnuryasin-0077B5?style=flat-square&logo=linkedin&logoColor=white&link=https://www.linkedin.com/in/bagusnuryasin/)](https://www.linkedin.com/in/bagusnuryasin/)
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
+
+<p align="center">:copyright: 2023 | Szczynk</p>
