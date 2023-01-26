@@ -123,6 +123,32 @@ docker-compose down
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
+## Features
+
+- **SQL database** using [PostgreSQL](https://www.postgresql.org/) With [GORM](https://gorm.io/) as ORM
+- **Distributed Cache** using [Redis](https://redis.io/)
+- **Distributed Messaging Broker** using [Kafka](https://kafka.apache.org/)
+- **S3 Bucket** using [Minio](https://min.io/)
+- **SMTP Testing** for sending and receiving email using [MailHog](https://github.com/mailhog/MailHog)
+- **Distributed Tracing** using [Jaeger](https://www.jaegertracing.io/) and [grpc_opentracing](https://github.com/grpc-ecosystem/go-grpc-middleware/blob/master/tracing/opentracing)
+- **Monitoring, Alert, and Analytics** using [Prometheus](https://prometheus.io/), [grpc_prometheus](https://github.com/grpc-ecosystem/go-grpc-prometheus), and [Grafana](https://grafana.com/)
+- **gRPC Services** using [gRPC](https://grpc.io/) and [grpc-go](https://github.com/grpc/grpc-go)
+- **gRPC to RESTful HTTP API** using [grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway) and `protoc-gen-grpc-gateway`
+- **gRPC Middleware** using [go-grpc-middleware](https://github.com/grpc-ecosystem/go-grpc-middleware)
+- **API Documentation** using [Swagger UI](https://github.com/swagger-api/swagger-ui), and `protoc-gen-openapiv2`
+- **Message Validators** using [grpc_validator](https://github.com/grpc-ecosystem/go-grpc-middleware/tree/master/validator) and [protoc-gen-validate](https://github.com/bufbuild/protoc-gen-validate)
+- **Authentication** using [PASETO v2](https://github.com/o1egl/paseto)
+- **Authorization and [RBAC](https://en.wikipedia.org/wiki/Role-based_access_control)** using [Casbin as a Service (CaaS)](https://github.com/casbin/casbin-server/)
+- **Logging** using [Zap](https://github.com/uber-go/zap) and [grpc_zap](https://github.com/grpc-ecosystem/go-grpc-middleware/blob/master/logging/zap)
+- **Error and Panic Handling** in `pkg/grpc-errors` and [grpc_recovery](https://github.com/grpc-ecosystem/go-grpc-middleware/tree/master/recovery)
+- **IP based Rate Limiter** using [limiter](https://github.com/ulule/limiter)
+- **CORS** enabled using [cors](https://github.com/rs/cors)
+- **Containerized App** using [Docker](https://www.docker.com/)
+- **Multi-Container Deployment** using [Docker Compose](https://docs.docker.com/compose/)
+- **Version Control** using [Git](https://git-scm.com/) and [Github](https://github.com/)
+
+<p align="right">(<a href="#table-of-contents">back to top</a>)</p>
+
 ## Entity Relation Diagram
 
 Entity Relation Diagram for this app shown in the picture below
@@ -134,13 +160,6 @@ Entity Relation Diagram for this app shown in the picture below
 
 High Level Architecture Diagram for this app shown in the picture below
 ![hld](/assets/safety.drawio.png)
-
-<p align="right">(<a href="#table-of-contents">back to top</a>)</p>
-
-## Features
-
-- **SQL database** using [PostgreSQL](https://www.postgresql.org/)
-- **Distributed cache** using [Redis](https://redis.io/)
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
