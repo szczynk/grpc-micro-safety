@@ -1,5 +1,17 @@
 # grpc-micro-safety
 
+<div align="center">
+  <a href="https://github.com/ellashella24/petshop">
+    <img src="assets/logo.png" alt="Logo" width="200" height="200">
+  </a>
+
+  <h3 align="center">New Normal Safety</h3>
+  <p align="center">
+    Tracking App Under New Normal Covid 19 Safety Protocol
+  </p>
+</div>
+<br />
+
 ## Table of Contents
 
 1. [Description](#description)
@@ -142,7 +154,7 @@ docker-compose down
 - **Logging** using [Zap](https://github.com/uber-go/zap) and [grpc_zap](https://github.com/grpc-ecosystem/go-grpc-middleware/blob/master/logging/zap)
 - **Error and Panic Handling** in `pkg/grpc-errors` and [grpc_recovery](https://github.com/grpc-ecosystem/go-grpc-middleware/tree/master/recovery)
 - **IP based Rate Limiter** using [limiter](https://github.com/ulule/limiter)
-- **CORS** enabled using [cors](https://github.com/rs/cors)
+- **CORS** enabled in gateway service using [cors](https://github.com/rs/cors)
 - **Containerized App** using [Docker](https://www.docker.com/)
 - **Multi-Container Deployment** using [Docker Compose](https://docs.docker.com/compose/)
 - **Version Control** using [Git](https://git-scm.com/) and [Github](https://github.com/)
