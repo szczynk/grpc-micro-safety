@@ -1,7 +1,7 @@
 # grpc-micro-safety
 
 <div align="center">
-  <a href="https://github.com/ellashella24/petshop">
+  <a href="https://github.com/szczynk/grpc-micro-safety">
     <img src="assets/logo.png" alt="Logo" width="200" height="200">
   </a>
 
