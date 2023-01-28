@@ -125,20 +125,71 @@ docker-compose down
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
-## Services
+## List of Services
 
-- grpc-gateway
-- auth
-- user
+Assuming in development env. Below are list of services:
+
+- [grpc-gateway](http://localhost:5000)
+- [API documentation](http://localhost:5000/swagger-ui/)
+- auth, check this [link](http://localhost:6001/healthz) for healthcheck
+- user, check this [link](http://localhost:6002/healthz) for healthcheck
 - mail
-- safety
+- safety, check this [link](http://localhost:6004/healthz) for healthcheck
+- [pgAdmin UI](http://localhost:5050)
+
+  ```bash
+  Username: pgadmin4@pgadmin.org
+  Password: admin
+  ```
+
+- [Minio Admin UI](http://localhost:9001)
+
+  ```bash
+  Username: minio
+  Password: minio-secret
+  ```
+
+- [MailHog UI](http://localhost:8025)
+
+  ```bash
+  Username: admin
+  Password: admin
+  ```
+
+- [Jaeger UI](http://localhost:16686)
+
+  ```bash
+  Username: admin
+  Password: admin
+  ```
+
+- [Grafana UI](http://localhost:3000)
+
+  ```bash
+  Username: admin
+  Password: admin
+  ```
+
+- [cAdvisor UI](http://localhost:8080)
+
+  ```bash
+  Username: admin
+  Password: admin
+  ```
+
+- [Prometheus UI](http://localhost:9090)
+
+  ```bash
+  Username: admin
+  Password: admin
+  ```
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
 ## Features
 
 - **SQL database** using [PostgreSQL](https://www.postgresql.org/) With [GORM](https://gorm.io/) as ORM
-- **Distributed Cache** using [Redis](https://redis.io/)
+- **Distributed Server Side Caching** using [Redis](https://redis.io/)
 - **Distributed Messaging Broker** using [Kafka](https://kafka.apache.org/)
 - **S3 Bucket** using [Minio](https://min.io/)
 - **SMTP Testing** for sending and receiving email using [MailHog](https://github.com/mailhog/MailHog)
