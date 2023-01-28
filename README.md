@@ -125,7 +125,7 @@ docker-compose down
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
-## List of Services
+## Services
 
 Assuming in development env. Below are list of services:
 
