@@ -137,6 +137,11 @@ func (u *usersService) Register(ctx context.Context, r *pb.RegisterRequest) (*pb
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "SendVerifyEmailFailed: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	successMsg := fmt.Sprintf("We sent an email with a verification code to %s.", registeredUser.Email)
 	return &pb.RegisterResponse{User: u.UserModelToProto(registeredUser), Message: successMsg}, nil
 }
@@ -192,6 +197,11 @@ func (u *usersService) Login(ctx context.Context, r *pb.LoginRequest) (*pb.Login
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "sessionUC.CreateSession: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	res := &pb.LoginResponse{
 		User:                  u.UserModelToProto(user),
 		AccessToken:           accessToken,
@@ -238,6 +248,11 @@ func (u *usersService) ForgotPassword(ctx context.Context, r *pb.ForgotPasswordR
 	if err != nil {
 		u.logger.Errorf("SendResetPassTokenFailed: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "SendResetPassTokenFailed: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	successMsg := fmt.Sprintf("We sent an email with a password reset token to %s.", user.Email)
@@ -306,6 +321,11 @@ func (u *usersService) ResetPassword(ctx context.Context, r *pb.ResetPasswordReq
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "SendUpdateUserKafkaResetPasswordFailed: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.ResetPasswordResponse{Message: "Reset password successful"}, nil
 }
 
@@ -369,6 +389,11 @@ func (u *usersService) VerifyEmail(ctx context.Context, r *pb.VerifyEmailRequest
 	if err != nil {
 		u.logger.Errorf("SendUpdateUserKafkaVerifyEmailFailed: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "SendUpdateUserKafkaVerifyEmailFailed: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.VerifyEmailResponse{Message: "Email verified successfully"}, nil

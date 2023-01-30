@@ -147,7 +147,7 @@ func (s *Server) Run() error {
 		reflection.Register(server)
 	}
 
-	// server
+	// service
 	authGRPCService := authGRPCService.NewAuthGRPCService(
 		s.logger, s.cfg, userUC, sessionUC,
 		s.tokenMaker, s.kafkaProducer, s.casbinClient,

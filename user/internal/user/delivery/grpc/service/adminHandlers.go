@@ -111,6 +111,11 @@ func (u *usersService) CreateUser(ctx context.Context, r *pb.CreateUserRequest) 
 		successMsg = ""
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.CreateUserResponse{User: u.UserModelToProto(createdUser), Message: successMsg}, nil
 }
 
@@ -206,6 +211,11 @@ func (u *usersService) UpdateUserById(ctx context.Context, r *pb.UpdateUserByIdR
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "SendUpdateUserKafkaByIdFailed: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.UpdateUserByIdResponse{User: u.UserModelToProto(updatedUser)}, nil
 }
 
@@ -261,6 +271,11 @@ func (u *usersService) DeleteUserById(ctx context.Context, r *pb.DeleteUserByIdR
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "SendDeleteUserKafkaByIdFailed: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.DeleteUserByIdResponse{Message: "User deleted successfully"}, nil
 }
 
@@ -300,6 +315,11 @@ func (u *usersService) FindUsers(ctx context.Context, r *pb.FindUsersRequest) (*
 		parsedUserList = append(parsedUserList, u.UserModelToProto(user))
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.FindUsersResponse{
 		TotalCount: totalCount,
 		TotalPages: paginateQuery.GetTotalPages(totalCount),
@@ -324,6 +344,11 @@ func (u *usersService) FindUserById(ctx context.Context, r *pb.FindUserByIdReque
 	if err != nil {
 		u.logger.Errorf("userUC.FindByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "userUC.FindByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.FindUserByIdResponse{User: u.UserModelToProto(user)}, nil

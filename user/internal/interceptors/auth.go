@@ -48,8 +48,6 @@ func (im *interceptorManager) AuthUnary(ctx context.Context, req interface{}, in
 		return nil, fmt.Errorf("invalid access token: %s", err)
 	}
 
-	fmt.Printf("%#v\n", payload)
-
 	userId := payload.Get("user_id")
 	role := payload.Get("role")
 	md.Append("user_id", userId)

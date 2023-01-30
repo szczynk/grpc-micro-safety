@@ -4,6 +4,8 @@ import (
 	"auth/pkg/grpc_errors"
 	"context"
 	"path"
+	"strconv"
+	"time"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"google.golang.org/grpc"
@@ -42,6 +44,10 @@ func (im *interceptorManager) RateLimitUnary(ctx context.Context, req interface{
 	if err != nil {
 		return nil, err
 	}
+
+	md.Append("X-RateLimit-Limit", strconv.FormatInt(limiterContext.Limit, 10))
+	md.Append("X-RateLimit-Remaining", strconv.FormatInt(limiterContext.Remaining, 10))
+	md.Append("X-RateLimit-Reset", time.Unix(limiterContext.Reset, 0).Format(time.RFC3339))
 
 	if limiterContext.Reached {
 		return nil, status.Errorf(codes.ResourceExhausted, "The method of %s's limit has been exceeded. Please try again later.", method)
@@ -84,6 +90,10 @@ func (im *interceptorManager) RateLimitStream(srv interface{}, stream grpc.Serve
 	if err != nil {
 		return err
 	}
+
+	md.Append("X-RateLimit-Limit", strconv.FormatInt(limiterContext.Limit, 10))
+	md.Append("X-RateLimit-Remaining", strconv.FormatInt(limiterContext.Remaining, 10))
+	md.Append("X-RateLimit-Reset", time.Unix(limiterContext.Reset, 0).Format(time.RFC3339))
 
 	if limiterContext.Reached {
 		return status.Errorf(codes.ResourceExhausted, "The method of %s's limit has been exceeded. Please try again later.", method)

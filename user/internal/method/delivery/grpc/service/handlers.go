@@ -55,6 +55,11 @@ func (u *methodsService) CreateMethod(ctx context.Context, r *pb.CreateMethodReq
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "CreateMethod: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.CreateMethodResponse{Method: u.MethodModelToProto(createdMethod)}, nil
 }
 
@@ -68,6 +73,11 @@ func (u *methodsService) DeleteMethodById(ctx context.Context, r *pb.DeleteMetho
 	if err != nil {
 		u.logger.Errorf("methodUC.DeleteByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "methodUC.DeleteByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.DeleteMethodByIdResponse{Message: "Method deleted successfully"}, nil
@@ -99,6 +109,11 @@ func (u *methodsService) FindMethods(ctx context.Context, r *pb.FindMethodsReque
 	parsedMethodList := make([]*pb.Method, 0, totalCount)
 	for _, method := range methodList {
 		parsedMethodList = append(parsedMethodList, u.MethodModelToProto(method))
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.FindMethodsResponse{

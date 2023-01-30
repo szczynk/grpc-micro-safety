@@ -207,7 +207,7 @@ func (s *Server) Run() error {
 
 	go func() {
 		s.logger.Infof("Server is listening on port: %v", s.cfg.Server.Port)
-		// s.logger.Infof("app info: %#v", server.GetServiceInfo())
+		// s.logger.Infof("app info: %+v", server.GetServiceInfo())
 
 		errCh <- server.Serve(listener)
 	}()

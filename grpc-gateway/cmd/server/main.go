@@ -23,7 +23,6 @@ import (
 
 func main() {
 	configPath := utils.GetConfigPath(os.Getenv("CONFIG_PATH"))
-	fmt.Println(configPath)
 	cfg, err := config.GetConfig(configPath)
 	if err != nil {
 		log.Fatalf("Loading config: %v", err)

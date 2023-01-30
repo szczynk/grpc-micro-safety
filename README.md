@@ -16,6 +16,10 @@
 
 1. [Description](#description)
 2. [Installation](#installation)
+    - [Local development experience](#local-development-experience)
+    - [Full docker experience](#full-docker-experience)
+    - [For Setup Minio Bucket](#for-setup-minio-bucket)
+    - [For Setup pgAdmin Servers List](#for-setup-pgadmin-servers-list)
 3. [Services](#services)
 4. [Entity Relation Diagram](#entity-relation-diagram)
 5. [High Level Architecture Diagram](#high-level-architecture-diagram)
@@ -89,6 +93,12 @@ cd mail && make run
 cd safety && make run
 ```
 
+Open the following url in the browser for API documentation (development env)
+
+```bash
+http://localhost:5000/swagger-ui/
+```
+
 if you done then stop every services and remove containers by using
 
 ```bash
@@ -122,6 +132,10 @@ if you done then stop and remove containers by using
 ```bash
 docker-compose down
 ```
+
+### [For Setup Minio Bucket](/docs/setup-minio.md)
+
+### [For Setup pgAdmin Servers List](/docs/setup-pgadmin.md)
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 

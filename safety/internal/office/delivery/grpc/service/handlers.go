@@ -53,6 +53,11 @@ func (u *officesService) CreateOffice(ctx context.Context, r *pb.CreateOfficeReq
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "CreateOffice: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.CreateOfficeResponse{Office: u.OfficeModelToProto(createdOffice)}, nil
 }
 
@@ -77,6 +82,11 @@ func (u *officesService) UpdateOfficeById(ctx context.Context, r *pb.UpdateOffic
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "officeUC.UpdateByID: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.UpdateOfficeByIdResponse{Office: u.OfficeModelToProto(updatedOffice)}, nil
 }
 
@@ -90,6 +100,11 @@ func (u *officesService) DeleteOfficeById(ctx context.Context, r *pb.DeleteOffic
 	if err != nil {
 		u.logger.Errorf("officeUC.DeleteByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "officeUC.DeleteByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.DeleteOfficeByIdResponse{Message: "Office deleted successfully"}, nil
@@ -127,6 +142,11 @@ func (u *officesService) FindOffices(ctx context.Context, r *pb.FindOfficesReque
 		parsedOfficeList = append(parsedOfficeList, u.OfficeModelToProto(office))
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.FindOfficesResponse{
 		TotalCount: totalCount,
 		TotalPages: paginateQuery.GetTotalPages(totalCount),
@@ -147,6 +167,11 @@ func (u *officesService) FindOfficeById(ctx context.Context, r *pb.FindOfficeByI
 	if err != nil {
 		u.logger.Errorf("officeUC.FindByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "officeUC.FindByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.FindOfficeByIdResponse{Office: u.OfficeModelToProto(office)}, nil

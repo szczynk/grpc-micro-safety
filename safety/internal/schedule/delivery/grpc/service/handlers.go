@@ -55,6 +55,11 @@ func (u *schedulesService) CreateSchedule(ctx context.Context, r *pb.CreateSched
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "CreateSchedule: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	// schedule return 31 id so it return message
 	return &pb.CreateScheduleResponse{Message: "Schedules created successfully"}, nil
 }
@@ -79,6 +84,11 @@ func (u *schedulesService) UpdateScheduleById(ctx context.Context, r *pb.UpdateS
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "scheduleUC.UpdateByID: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.UpdateScheduleByIdResponse{Schedule: u.ScheduleModelToProto(updatedSchedule)}, nil
 }
 
@@ -92,6 +102,11 @@ func (u *schedulesService) DeleteScheduleById(ctx context.Context, r *pb.DeleteS
 	if err != nil {
 		u.logger.Errorf("scheduleUC.DeleteByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "scheduleUC.DeleteByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.DeleteScheduleByIdResponse{Message: "Schedule deleted successfully"}, nil
@@ -136,6 +151,11 @@ func (u *schedulesService) FindSchedules(ctx context.Context, r *pb.FindSchedule
 		parsedScheduleList = append(parsedScheduleList, u.ScheduleWithOfficeToProto(schedule))
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.FindSchedulesResponse{
 		TotalCount: totalCount,
 		TotalPages: paginateQuery.GetTotalPages(totalCount),
@@ -157,6 +177,11 @@ func (u *schedulesService) FindScheduleById(ctx context.Context, r *pb.FindSched
 	if err != nil {
 		u.logger.Errorf("scheduleUC.FindByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "scheduleUC.FindByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.FindScheduleByIdResponse{Schedule: u.ScheduleWithOfficeToProto(schedule)}, nil

@@ -1,4 +1,4 @@
-version: "3"
+version: "3.9"
 
 networks:
   safety-net:
@@ -192,7 +192,8 @@ services:
         condition: service_healthy
       kafka1:
         condition: service_healthy
-
+  # =============================================================================
+  # =============================================================================
   postgres1:
     image: szczynk/postgres_cron:15.1
     container_name: postgres1
@@ -213,6 +214,11 @@ services:
       timeout: 30s
       retries: 10
       start_period: 1s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
 
   postgres2:
     image: szczynk/postgres_cron:15.1
@@ -234,6 +240,11 @@ services:
       timeout: 30s
       retries: 10
       start_period: 1s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
 
   postgres3:
     image: szczynk/postgres_cron:15.1
@@ -255,6 +266,11 @@ services:
       timeout: 30s
       retries: 10
       start_period: 1s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
 
   pgadmin:
     image: dpage/pgadmin4:6.19
@@ -276,6 +292,11 @@ services:
         condition: service_healthy
       postgres3:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
 
   casbin-server:
     image: szczynk/casbin-service
@@ -288,8 +309,13 @@ services:
       test: [ "CMD-SHELL", "nc -vz casbin-server 50051" ]
       interval: 5s
       timeout: 5s
-      retries: 3
+      retries: 20
       start_period: 1s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
 
   redis:
     image: redis:7.0.7-alpine
@@ -306,6 +332,11 @@ services:
       interval: 1s
       timeout: 3s
       retries: 30
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
 
   zoo1:
     image: confluentinc/cp-zookeeper:7.3.0
@@ -333,8 +364,13 @@ services:
       test: [ "CMD-SHELL", "nc -vz localhost 2181" ]
       interval: 5s
       timeout: 5s
-      retries: 3
+      retries: 20
       start_period: 1s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
 
   kafka1:
     image: confluentinc/cp-kafka:7.3.0
@@ -368,14 +404,19 @@ services:
         source: kafka1_secrets
         target: /etc/kafka/secrets
     depends_on:
-      - zoo1
-    mem_limit: 512m
+      zoo1:
+        condition: service_healthy
     healthcheck:
       test: [ "CMD-SHELL", "nc -vz localhost 9092" ]
       interval: 5s
       timeout: 5s
       retries: 20
       start_period: 5s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.3'
 
   jmx-kafka1:
     image: "sscaling/jmx-prometheus-exporter"
@@ -392,6 +433,11 @@ services:
     depends_on:
       kafka1:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.3'
 
   minio:
     image: minio/minio:latest
@@ -414,9 +460,14 @@ services:
           "curl -f http://minio:9000/minio/health/live"
         ]
       interval: 30s
-      timeout: 20s
-      retries: 3
+      timeout: 30s
+      retries: 10
       start_period: 1s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
 
   mailhog:
     image: mailhog/mailhog
@@ -433,6 +484,11 @@ services:
     environment:
       MH_STORAGE: maildir
       MH_MAILDIR_PATH: /home/mailhog
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.2'
 
   jaeger:
     image: jaegertracing/all-in-one:latest
@@ -460,6 +516,11 @@ services:
       BADGER_EPHEMERAL: "false"
       BADGER_DIRECTORY_VALUE: /badger/data
       BADGER_DIRECTORY_KEY: /badger/key
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
 
   prometheus:
     image: prom/prometheus:v2.41.0
@@ -479,6 +540,11 @@ services:
       - 9090
     networks:
       - safety-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
     labels:
       org.label-schema.group: "monitoring"
 
@@ -496,6 +562,11 @@ services:
       - 9093
     networks:
       - safety-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
     labels:
       org.label-schema.group: "monitoring"
 
@@ -516,6 +587,11 @@ services:
       - 9100
     networks:
       - safety-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
     labels:
       org.label-schema.group: "monitoring"
 
@@ -536,6 +612,11 @@ services:
       - 8080
     networks:
       - safety-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.3'
     labels:
       org.label-schema.group: "monitoring"
 
@@ -555,6 +636,11 @@ services:
       - 3000
     networks:
       - safety-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
     labels:
       org.label-schema.group: "monitoring"
 
@@ -566,6 +652,11 @@ services:
       - 9091
     networks:
       - safety-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
     labels:
       org.label-schema.group: "monitoring"
 
@@ -594,5 +685,10 @@ services:
     restart: unless-stopped
     networks:
       - safety-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
     labels:
       org.label-schema.group: "monitoring"

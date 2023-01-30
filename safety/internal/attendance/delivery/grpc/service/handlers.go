@@ -95,6 +95,11 @@ func (u *attendancesService) CreateAttendance(ctx context.Context, r *pb.CreateA
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "CreateAttendance: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.CreateAttendanceResponse{Attendance: u.AttendanceModelToProto(createdAttendance)}, nil
 }
 
@@ -146,6 +151,11 @@ func (u *attendancesService) UpdateAttendanceById(ctx context.Context, r *pb.Upd
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "attendanceUC.UpdateByID: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.UpdateAttendanceByIdResponse{Attendance: u.AttendanceModelToProto(updatedAttendance)}, nil
 }
 
@@ -159,6 +169,11 @@ func (u *attendancesService) DeleteAttendanceById(ctx context.Context, r *pb.Del
 	if err != nil {
 		u.logger.Errorf("attendanceUC.DeleteByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "attendanceUC.DeleteByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.DeleteAttendanceByIdResponse{Message: "Attendance deleted successfully"}, nil
@@ -219,6 +234,11 @@ func (u *attendancesService) FindAttendances(ctx context.Context, r *pb.FindAtte
 		parsedAttendanceList = append(parsedAttendanceList, u.AttendanceDetailToProto(attendance))
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.FindAttendancesResponse{
 		TotalCount:  totalCount,
 		TotalPages:  paginateQuery.GetTotalPages(totalCount),
@@ -239,6 +259,11 @@ func (u *attendancesService) FindAttendanceById(ctx context.Context, r *pb.FindA
 	if err != nil {
 		u.logger.Errorf("attendanceUC.FindByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "attendanceUC.FindByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.FindAttendanceByIdResponse{Attendance: u.AttendanceDetailToProto(attendance)}, nil

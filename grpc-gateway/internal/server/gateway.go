@@ -122,7 +122,7 @@ func (s *Server) RunGateway() error {
 
 			w.Header().Add("X-RateLimit-Limit", strconv.FormatInt(limiterContext.Limit, 10))
 			w.Header().Add("X-RateLimit-Remaining", strconv.FormatInt(limiterContext.Remaining, 10))
-			w.Header().Add("X-RateLimit-Reset", strconv.FormatInt(limiterContext.Reset, 10))
+			w.Header().Add("X-RateLimit-Reset", time.Unix(limiterContext.Reset, 0).Format(time.RFC3339))
 
 			if limiterContext.Reached {
 				http.Error(
@@ -250,7 +250,7 @@ func (s *Server) RunGateway() error {
 
 			w.Header().Add("X-RateLimit-Limit", strconv.FormatInt(limiterContext.Limit, 10))
 			w.Header().Add("X-RateLimit-Remaining", strconv.FormatInt(limiterContext.Remaining, 10))
-			w.Header().Add("X-RateLimit-Reset", strconv.FormatInt(limiterContext.Reset, 10))
+			w.Header().Add("X-RateLimit-Reset", time.Unix(limiterContext.Reset, 0).Format(time.RFC3339))
 
 			if limiterContext.Reached {
 				http.Error(

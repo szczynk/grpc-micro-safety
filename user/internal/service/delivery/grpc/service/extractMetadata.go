@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"safety/pkg/grpc_errors"
+	"user/pkg/grpc_errors"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -10,28 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// extract user_id from metadata
-func (u *certificatesService) ExtractUserId(ctx context.Context) (userId string, userRole string, err error) {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return "", "", grpc_errors.ErrNoCtxMetaData
-	}
-
-	userID := md.Get("user_id")
-	if len(userID) == 0 {
-		return "", "", grpc_errors.ErrNoUserId
-	}
-
-	userrole := md.Get("role")
-	if len(userrole) == 0 {
-		return "", "", grpc_errors.ErrNoUserId
-	}
-
-	userId, userRole = userID[0], userrole[0]
-	return userId, userRole, nil
-}
-
-func (u *certificatesService) SendHeader(ctx context.Context) error {
+func (u *servicesService) SendHeader(ctx context.Context) error {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return grpc_errors.ErrNoCtxMetaData

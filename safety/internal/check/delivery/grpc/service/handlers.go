@@ -67,6 +67,11 @@ func (u *checksService) CheckIn(ctx context.Context, r *pb.CheckInRequest) (*pb.
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "attendanceUC.UpdateByID: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.CheckInResponse{CheckIn: u.AttendanceModelToProto(updatedAttendance)}, nil
 }
 
@@ -88,6 +93,11 @@ func (u *checksService) CheckOut(ctx context.Context, r *pb.CheckOutRequest) (*p
 	if err != nil {
 		u.logger.Errorf("attendanceUC.UpdateByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "attendanceUC.UpdateByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.CheckOutResponse{CheckOut: u.AttendanceModelToProto(updatedAttendance)}, nil
@@ -144,6 +154,11 @@ func (u *checksService) FindChecks(ctx context.Context, r *pb.FindChecksRequest)
 		parsedCheckList = append(parsedCheckList, u.AttendanceDetailToProto(check))
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.FindChecksResponse{
 		TotalCount: totalCount,
 		TotalPages: paginateQuery.GetTotalPages(totalCount),
@@ -164,6 +179,11 @@ func (u *checksService) FindCheckById(ctx context.Context, r *pb.FindCheckByIdRe
 	if err != nil {
 		u.logger.Errorf("attendanceUC.FindByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "attendanceUC.FindByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.FindCheckByIdResponse{Check: u.AttendanceDetailToProto(check)}, nil

@@ -55,6 +55,11 @@ func (u *rolesService) CreateRole(ctx context.Context, r *pb.CreateRoleRequest) 
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "CreateRole: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.CreateRoleResponse{Role: u.RoleModelToProto(createdRole)}, nil
 }
 
@@ -68,6 +73,11 @@ func (u *rolesService) DeleteRoleById(ctx context.Context, r *pb.DeleteRoleByIdR
 	if err != nil {
 		u.logger.Errorf("roleUC.DeleteByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "roleUC.DeleteByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.DeleteRoleByIdResponse{Message: "Role deleted successfully"}, nil
@@ -99,6 +109,11 @@ func (u *rolesService) FindRoles(ctx context.Context, r *pb.FindRolesRequest) (*
 	parsedRoleList := make([]*pb.Role, 0, totalCount)
 	for _, role := range roleList {
 		parsedRoleList = append(parsedRoleList, u.RoleModelToProto(role))
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.FindRolesResponse{

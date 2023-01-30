@@ -64,6 +64,11 @@ func (u *certificatesService) CreateCertificate(ctx context.Context, r *pb.Creat
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "CreateCertificate: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.CreateCertificateResponse{Certificate: u.CertificateModelToProto(createdCertificate)}, nil
 }
 
@@ -111,6 +116,11 @@ func (u *certificatesService) UpdateCertificateById(ctx context.Context, r *pb.U
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "certificateUC.UpdateByID: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.UpdateCertificateByIdResponse{Certificate: u.CertificateModelToProto(updatedCertificate)}, nil
 }
 
@@ -124,6 +134,11 @@ func (u *certificatesService) DeleteCertificateById(ctx context.Context, r *pb.D
 	if err != nil {
 		u.logger.Errorf("certificateUC.DeleteByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "certificateUC.DeleteByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.DeleteCertificateByIdResponse{Message: "Certificate deleted successfully"}, nil
@@ -180,6 +195,11 @@ func (u *certificatesService) FindCertificates(ctx context.Context, r *pb.FindCe
 		parsedCertificateList = append(parsedCertificateList, u.CertificateDetailToProto(certificate))
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.FindCertificatesResponse{
 		TotalCount:   totalCount,
 		TotalPages:   paginateQuery.GetTotalPages(totalCount),
@@ -200,6 +220,11 @@ func (u *certificatesService) FindCertificateById(ctx context.Context, r *pb.Fin
 	if err != nil {
 		u.logger.Errorf("certificateUC.FindByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "certificateUC.FindByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.FindCertificateByIdResponse{Certificate: u.CertificateModelToProto(certificate)}, nil

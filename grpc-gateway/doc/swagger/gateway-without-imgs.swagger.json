@@ -18,9 +18,6 @@
       "name": "CheckService"
     },
     {
-      "name": "ImageService"
-    },
-    {
       "name": "MethodService"
     },
     {
@@ -1018,60 +1015,6 @@
         ],
         "tags": [
           "CheckService"
-        ]
-      }
-    },
-    "/images": {
-      "post": {
-        "summary": "Upload a new image",
-        "description": "Use this API to upload a new image",
-        "operationId": "ImageService_UploadImage",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/pbUploadImageResponse"
-            }
-          }
-        },
-        "consumes": ["multipart/form-data"],
-        "parameters": [
-          {
-            "in": "formData",
-            "name": "image",
-            "type": "file",
-            "required": true
-          }
-        ],
-        "tags": [
-          "ImageService"
-        ]
-      }
-    },
-    "/images/{id}": {
-      "get": {
-        "summary": "Find Image By Id",
-        "description": "Use this API to find image by id",
-        "operationId": "ImageService_FindImageById",
-        "produces": ["image/*"],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "type": "file"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "ImageService"
         ]
       }
     },
@@ -3450,58 +3393,6 @@
         }
       }
     },
-    "pbImage": {
-      "type": "object",
-      "properties": {
-        "Bucket": {
-          "type": "string",
-          "example": "safety"
-        },
-        "Key": {
-          "type": "string",
-          "example": "images/69d3091b-79c8-4448-a814-2dcb51a8521b-safety.png"
-        },
-        "ETag": {
-          "type": "string",
-          "example": "736410f9db16fd38329dc26f65ab4106"
-        },
-        "Size": {
-          "type": "integer",
-          "format": "int64",
-          "example": "147939"
-        },
-        "LastModified": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "Location": {
-          "type": "string",
-          "example": "us-east-1"
-        },
-        "VersionID": {
-          "type": "string"
-        },
-        "Expiration": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "ExpirationRuleID": {
-          "type": "string"
-        },
-        "ChecksumCRC32": {
-          "type": "string"
-        },
-        "ChecksumCRC32C": {
-          "type": "string"
-        },
-        "ChecksumSHA1": {
-          "type": "string"
-        },
-        "ChecksumSHA256": {
-          "type": "string"
-        }
-      }
-    },
     "pbLoginRequest": {
       "type": "object",
       "properties": {
@@ -3861,14 +3752,6 @@
       "properties": {
         "user": {
           "$ref": "#/definitions/pbUser"
-        }
-      }
-    },
-    "pbUploadImageResponse": {
-      "type": "object",
-      "properties": {
-        "image": {
-          "$ref": "#/definitions/pbImage"
         }
       }
     },

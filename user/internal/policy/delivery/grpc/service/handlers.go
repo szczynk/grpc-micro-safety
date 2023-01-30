@@ -55,6 +55,11 @@ func (u *policiesService) CreatePolicy(ctx context.Context, r *pb.CreatePolicyRe
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "CreatePolicy1: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.CreatePolicyResponse{Policy: newPolicy}, nil
 }
 
@@ -72,6 +77,11 @@ func (u *policiesService) DeletePolicy(ctx context.Context, r *pb.DeletePolicyRe
 	if err != nil {
 		u.logger.Errorf("policyUC.DeletePolicy: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "DeletePolicy: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.DeletePolicyResponse{Res: ruleRemoved}, nil
@@ -103,6 +113,11 @@ func (u *policiesService) FindPolicies(ctx context.Context, r *pb.FindPoliciesRe
 	parsedPolicyList := make([]*pb.Policy, 0, totalCount)
 	for _, policy := range policyList {
 		parsedPolicyList = append(parsedPolicyList, u.PolicyModelToProto(policy))
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.FindPoliciesResponse{

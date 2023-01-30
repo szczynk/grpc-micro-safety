@@ -108,6 +108,11 @@ func (u *usersService) RefreshAccessToken(ctx context.Context, r *pb.RefreshAcce
 		return nil, status.Errorf(codes.Internal, "CreateAccessToken: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	res := &pb.RefreshAccessTokenResponse{
 		AccessToken:          accessToken,
 		AccessTokenExpiresAt: timestamppb.New(accessPayload.Expiration),
@@ -162,6 +167,11 @@ func (u *usersService) UpdateMe(ctx context.Context, r *pb.UpdateMeRequest) (*pb
 	if err != nil {
 		u.logger.Errorf("SendUpdateUserKafkaByIdFailed: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "SendUpdateUserKafkaByIdFailed: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.UpdateMeResponse{User: u.UserModelToProto(user)}, nil
@@ -237,6 +247,11 @@ func (u *usersService) ChangeEmail(ctx context.Context, r *pb.ChangeEmailRequest
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "SendVerifyEmailFailed: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	successMsg := fmt.Sprintf("We sent an email with a verification code to %s.", user.Email)
 	return &pb.ChangeEmailResponse{User: u.UserModelToProto(user), Message: successMsg}, nil
 }
@@ -265,6 +280,11 @@ func (u *usersService) Logout(ctx context.Context, r *pb.LogoutRequest) (*pb.Log
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "sessionUC.GetSessionByID: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.LogoutResponse{}, nil
 }
 
@@ -290,6 +310,11 @@ func (u *usersService) GetMe(ctx context.Context, r *pb.GetMeRequest) (*pb.GetMe
 	if err != nil {
 		u.logger.Errorf("userUC.FindByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "userUC.FindByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.GetMeResponse{User: u.UserModelToProto(user)}, nil

@@ -63,6 +63,11 @@ func (u *workspacesService) CreateWorkspace(ctx context.Context, r *pb.CreateWor
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "CreateWorkspace: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.CreateWorkspaceResponse{
 		Workspace: &pb.Workspace{
 			OfficeId: createdWorkspace.OfficeID,
@@ -85,6 +90,11 @@ func (u *workspacesService) DeleteWorkspaceById(ctx context.Context, r *pb.Delet
 	if err != nil {
 		u.logger.Errorf("workspaceUC.DeleteByUserID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "workspaceUC.DeleteByUserID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.DeleteWorkspaceByIdResponse{Message: "Workspace deleted successfully"}, nil
@@ -144,6 +154,11 @@ func (u *workspacesService) FindWorkspaces(ctx context.Context, r *pb.FindWorksp
 	parsedUserList := make([]*pb.User, 0, totalCount)
 	for _, user := range workspaceList {
 		parsedUserList = append(parsedUserList, u.UserModelToProto(user))
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.FindWorkspacesResponse{

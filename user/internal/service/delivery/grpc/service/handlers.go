@@ -55,6 +55,11 @@ func (u *servicesService) CreateService(ctx context.Context, r *pb.CreateService
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "CreateService: %v", err)
 	}
 
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.CreateServiceResponse{Service: u.ServiceModelToProto(createdService)}, nil
 }
 
@@ -68,6 +73,11 @@ func (u *servicesService) DeleteServiceById(ctx context.Context, r *pb.DeleteSer
 	if err != nil {
 		u.logger.Errorf("serviceUC.DeleteByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "serviceUC.DeleteByID: %v", err)
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.DeleteServiceByIdResponse{Message: "Service deleted successfully"}, nil
@@ -99,6 +109,11 @@ func (u *servicesService) FindServices(ctx context.Context, r *pb.FindServicesRe
 	parsedServiceList := make([]*pb.Service, 0, totalCount)
 	for _, service := range serviceList {
 		parsedServiceList = append(parsedServiceList, u.ServiceModelToProto(service))
+	}
+
+	err = u.SendHeader(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	return &pb.FindServicesResponse{

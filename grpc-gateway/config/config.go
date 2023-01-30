@@ -236,6 +236,15 @@ func GetConfig(configPath string) (*Config, error) {
 		cfg.Minio.SecretAccessKey = minioSecretAccessKey
 	}
 
+	minioNewBucket := os.Getenv("MINIO_NEWBUCKET")
+	if len(minioNewBucket) > 0 {
+		newBucket, err := strconv.ParseBool(minioNewBucket)
+		if err != nil {
+			return nil, err
+		}
+		cfg.Minio.NewBucket = newBucket
+	}
+
 	minioBucket := os.Getenv("MINIO_BUCKET")
 	if len(minioBucket) > 0 {
 		cfg.Minio.Bucket = minioBucket

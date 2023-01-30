@@ -1,4 +1,4 @@
-version: "3"
+version: "3.9"
 
 networks:
   safety-net:
@@ -117,7 +117,7 @@ services:
       test: [ "CMD-SHELL", "nc -vz localhost 50051" ]
       interval: 5s
       timeout: 5s
-      retries: 3
+      retries: 20
       start_period: 1s
 
   redis:
@@ -162,7 +162,7 @@ services:
       test: [ "CMD-SHELL", "nc -vz localhost 2181" ]
       interval: 5s
       timeout: 5s
-      retries: 3
+      retries: 20
       start_period: 1s
 
   kafka1:
@@ -197,8 +197,8 @@ services:
         source: kafka1_secrets
         target: /etc/kafka/secrets
     depends_on:
-      - zoo1
-    mem_limit: 512m
+      zoo1:
+        condition: service_healthy
     healthcheck:
       test: [ "CMD-SHELL", "nc -vz localhost 9092" ]
       interval: 5s
@@ -243,8 +243,8 @@ services:
           "curl -f http://localhost:9000/minio/health/live"
         ]
       interval: 30s
-      timeout: 20s
-      retries: 3
+      timeout: 30s
+      retries: 10
       start_period: 1s
 
   # https://github.com/mailhog/MailHog/blob/master/docs/CONFIG.md
