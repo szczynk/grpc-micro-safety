@@ -72,9 +72,9 @@ func (u *attendancesService) CreateAttendance(ctx context.Context, r *pb.CreateA
 		u.logger.Errorf("certificateUC.CountByUserID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "CountByUserID: %v", err)
 	}
-	if certificate != 3 {
-		u.logger.Error("The number of approved vaccine certificates is not three.")
-		return nil, status.Errorf(codes.InvalidArgument, "The number of approved vaccine certificates is not three.")
+	if certificate < 3 {
+		u.logger.Error("The number of approved vaccine certificates is less than three.")
+		return nil, status.Errorf(codes.InvalidArgument, "The number of approved vaccine certificates is less than three.")
 	}
 
 	// TODO(Bagus): Check is Request's date > time.Now()

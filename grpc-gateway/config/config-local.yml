@@ -43,6 +43,7 @@ casbin:
   PostgresUser: postgres
   PostgresPassword: postgres
   PostgresSslmode: disable
+  PostgresTZ: Asia/Jakarta
   Url: localhost:50051
 
 minio:

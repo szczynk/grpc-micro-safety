@@ -19,13 +19,14 @@ const (
 
 func NewDBInit(cfg *config.Config) (*gorm.DB, error) {
 	dataSourceName := fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s TimeZone=Asia/Jakarta",
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s TimeZone=%s",
 		cfg.Postgres.Host,
 		cfg.Postgres.Port,
 		cfg.Postgres.User,
 		cfg.Postgres.Password,
 		cfg.Postgres.DBName,
 		cfg.Postgres.SSLMode,
+		cfg.Postgres.TZ,
 	)
 
 	var (

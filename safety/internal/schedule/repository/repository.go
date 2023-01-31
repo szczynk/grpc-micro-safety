@@ -22,7 +22,7 @@ func NewScheduleRepository(db *gorm.DB) domain.ScheduleRepository {
 
 // *Command
 
-func (ur *scheduleRepo) CreateSchedule(ctx context.Context, schedule *models.CreateSchedule) error {
+func (ur *scheduleRepo) CreateSchedule(ctx context.Context, schedule *models.CreateSchedule, tz string) error {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "ScheduleRepo.CreateSchedule")
 	defer span.Finish()
 
@@ -31,7 +31,7 @@ func (ur *scheduleRepo) CreateSchedule(ctx context.Context, schedule *models.Cre
 	year := int(schedule.Year)
 
 	day := 1
-	gmt, err := time.LoadLocation("Asia/Jakarta")
+	gmt, err := time.LoadLocation(tz)
 	if err != nil {
 		return err
 	}

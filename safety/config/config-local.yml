@@ -22,6 +22,7 @@ postgres:
   Password: postgres
   DBName: safety
   SSLMode: disable
+  TZ: Asia/Jakarta
 
 redis:
   Address: localhost:6379
@@ -58,6 +59,7 @@ casbin:
   PostgresUser: postgres
   PostgresPassword: postgres
   PostgresSslmode: disable
+  PostgresTZ: Asia/Jakarta
   Url: localhost:50051
 
 metrics:

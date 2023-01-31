@@ -49,7 +49,7 @@ func (u *schedulesService) CreateSchedule(ctx context.Context, r *pb.CreateSched
 		Year:          r.GetYear(),
 	}
 
-	err := u.scheduleUC.CreateSchedule(ctx, newSchedule)
+	err := u.scheduleUC.CreateSchedule(ctx, newSchedule, u.cfg.Postgres.TZ)
 	if err != nil {
 		u.logger.Errorf("scheduleUC.CreateSchedule: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "CreateSchedule: %v", err)

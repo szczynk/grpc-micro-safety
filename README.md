@@ -18,6 +18,7 @@
 2. [Installation](#installation)
     - [Local development experience](#local-development-experience)
     - [Full docker experience](#full-docker-experience)
+    - [For default admin credential](#for-default-admin-credential)
     - [For Setup Minio Bucket](#for-setup-minio-bucket)
     - [For Setup pgAdmin Servers List](#for-setup-pgadmin-servers-list)
 3. [Services](#services)
@@ -131,6 +132,13 @@ if you done then stop and remove containers by using
 
 ```bash
 docker-compose down
+```
+
+### For default admin credential
+
+```bash
+Username: admin@safety.com
+Password: admin123
 ```
 
 ### [For Setup Minio Bucket](/docs/setup-minio.md)

@@ -11,13 +11,13 @@ type Attendance struct {
 	gorm.Model
 	UserID           uuid.UUID `gorm:"primaryKey"`
 	User             User      `gorm:"foreignKey:UserID;references:ID"`
-	UserUsername     string    `gorm:"-:migration"`
-	UserAvatar       string    `gorm:"-:migration"`
+	UserUsername     string    `gorm:"->;-:migration;"`
+	UserAvatar       string    `gorm:"->;-:migration;"`
 	ScheduleID       uint32    `gorm:"primaryKey"`
 	Schedule         Schedule  `gorm:"foreignKey:ScheduleID;references:ID"`
-	ScheduleDate     time.Time `gorm:"-:migration"`
-	OfficeID         string    `gorm:"-:migration"`
-	OfficeName       string    `gorm:"-:migration"`
+	ScheduleDate     time.Time `gorm:"->;-:migration;"`
+	OfficeID         string    `gorm:"->;-:migration;"`
+	OfficeName       string    `gorm:"->;-:migration;"`
 	ImageUrl         string
 	Description      string
 	AdminUsername    string

@@ -215,6 +215,7 @@ func (s *Server) RunGateway() error {
 				},
 			)
 			if err != nil {
+				s.logger.Errorf("minio.PutObject: %v", err)
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
@@ -223,6 +224,7 @@ func (s *Server) RunGateway() error {
 			w.WriteHeader(http.StatusCreated)
 			err = json.NewEncoder(w).Encode(info)
 			if err != nil {
+				s.logger.Errorf("json.NewEncoder: %v", err)
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
@@ -319,6 +321,7 @@ func (s *Server) RunGateway() error {
 				minio.GetObjectOptions{},
 			)
 			if err != nil {
+				s.logger.Errorf("minio.GetObject: %v", err)
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
@@ -326,6 +329,7 @@ func (s *Server) RunGateway() error {
 
 			objInfo, err := object.Stat()
 			if err != nil {
+				s.logger.Errorf("minio.GetObject.Stat: %v", err)
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}

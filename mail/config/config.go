@@ -47,6 +47,7 @@ type PostgresConfig struct {
 	Password string
 	DBName   string
 	SSLMode  string
+	TZ       string
 }
 
 // Redis config
@@ -173,6 +174,11 @@ func GetConfig(configPath string) (*Config, error) {
 	postgresDBName := os.Getenv("PGDBNAME")
 	if len(postgresDBName) > 0 {
 		cfg.Postgres.DBName = postgresDBName
+	}
+
+	postgresTZ := os.Getenv("PGTZ")
+	if len(postgresTZ) > 0 {
+		cfg.Postgres.TZ = postgresTZ
 	}
 
 	redisAddress := os.Getenv("REDIS_ADDRESS")

@@ -15,12 +15,13 @@ type CasbinClient struct {
 
 func NewCasbinClient(ctx context.Context, cfg *config.Config) (*client.Enforcer, error) {
 	dataSourceName := fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=casbin sslmode=%s TimeZone=Asia/Jakarta",
+		"host=%s port=%s user=%s password=%s dbname=casbin sslmode=%s TimeZone=%s",
 		cfg.Casbin.PostgresHost,
 		cfg.Casbin.PostgresPort,
 		cfg.Casbin.PostgresUser,
 		cfg.Casbin.PostgresPassword,
 		cfg.Casbin.PostgresSSLMode,
+		cfg.Casbin.PostgresTZ,
 	)
 
 	casbinConfig := client.Config{

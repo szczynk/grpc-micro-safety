@@ -12,8 +12,8 @@ type Certificate struct {
 	gorm.Model
 	UserID        uuid.UUID
 	User          User   `gorm:"foreignKey:UserID;references:ID"`
-	UserUsername  string `gorm:"-:migration"`
-	UserAvatar    string `gorm:"-:migration"`
+	UserUsername  string `gorm:"->;-:migration;"`
+	UserAvatar    string `gorm:"->;-:migration;"`
 	Dose          uint32
 	ImageUrl      string
 	Description   string

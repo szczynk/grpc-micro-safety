@@ -10,7 +10,7 @@ type Schedule struct {
 	gorm.Model
 	OfficeID      uint32
 	Office        Office `gorm:"foreignKey:OfficeID;references:ID"`
-	OfficeName    string `gorm:"-:migration"`
+	OfficeName    string `gorm:"->;-:migration;"`
 	TotalCapacity uint32
 	Capacity      uint32
 	Date          time.Time `gorm:"uniqueIndex"`

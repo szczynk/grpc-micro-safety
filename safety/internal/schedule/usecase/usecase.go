@@ -31,11 +31,11 @@ func NewScheduleUseCase(logger logger.Logger, scheduleRepo domain.ScheduleReposi
 // *Command
 
 // create new schedule
-func (u *scheduleUseCase) CreateSchedule(ctx context.Context, schedule *models.CreateSchedule) error {
+func (u *scheduleUseCase) CreateSchedule(ctx context.Context, schedule *models.CreateSchedule, tz string) error {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "ScheduleUseCase.CreateSchedule")
 	defer span.Finish()
 
-	err := u.scheduleRepo.CreateSchedule(ctx, schedule)
+	err := u.scheduleRepo.CreateSchedule(ctx, schedule, tz)
 	if err != nil {
 		u.logger.Errorf("scheduleRepo.CreateSchedule: %v", err)
 		return fmt.Errorf("scheduleRepo.CreateSchedule: %v", err)

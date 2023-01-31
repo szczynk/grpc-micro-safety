@@ -56,6 +56,7 @@ type PostgresConfig struct {
 	Password string
 	DBName   string
 	SSLMode  string
+	TZ       string
 }
 
 // Redis config
@@ -101,6 +102,7 @@ type Casbin struct {
 	PostgresUser     string
 	PostgresPassword string
 	PostgresSSLMode  string
+	PostgresTZ       string
 	URL              string
 }
 
@@ -199,6 +201,11 @@ func GetConfig(configPath string) (*Config, error) {
 		cfg.Postgres.DBName = postgresDBName
 	}
 
+	postgresTZ := os.Getenv("PGTZ")
+	if len(postgresTZ) > 0 {
+		cfg.Postgres.TZ = postgresTZ
+	}
+
 	redisAddress := os.Getenv("REDIS_ADDRESS")
 	if len(redisAddress) > 0 {
 		cfg.Redis.Address = redisAddress
@@ -236,6 +243,11 @@ func GetConfig(configPath string) (*Config, error) {
 	casbinPostgresPassword := os.Getenv("CASBIN_PGPASSWORD")
 	if len(casbinPostgresPassword) > 0 {
 		cfg.Casbin.PostgresPassword = casbinPostgresPassword
+	}
+
+	casbinPostgresTZ := os.Getenv("CASBIN_PGTZ")
+	if len(casbinPostgresTZ) > 0 {
+		cfg.Casbin.PostgresTZ = casbinPostgresTZ
 	}
 
 	casbinURL := os.Getenv("CASBIN_URL")

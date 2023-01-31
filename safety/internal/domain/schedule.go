@@ -9,7 +9,7 @@ import (
 
 // Schedule Repository
 type ScheduleRepository interface {
-	CreateSchedule(ctx context.Context, schedule *models.CreateSchedule) error
+	CreateSchedule(ctx context.Context, schedule *models.CreateSchedule, tz string) error
 	UpdateByID(ctx context.Context, ID uint32, updates models.Schedule) (*models.Schedule, error)
 	DeleteByID(ctx context.Context, ID uint32) error
 
@@ -27,7 +27,7 @@ type ScheduleRedisRepository interface {
 
 // Schedule Usecase
 type ScheduleUseCase interface {
-	CreateSchedule(ctx context.Context, schedule *models.CreateSchedule) error
+	CreateSchedule(ctx context.Context, schedule *models.CreateSchedule, tz string) error
 	UpdateByID(ctx context.Context, ID uint32, updates models.Schedule) (*models.Schedule, error)
 	DeleteByID(ctx context.Context, ID uint32) error
 

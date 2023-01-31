@@ -81,6 +81,7 @@ type Casbin struct {
 	PostgresUser     string
 	PostgresPassword string
 	PostgresSSLMode  string
+	PostgresTZ       string
 	URL              string
 }
 
@@ -204,6 +205,11 @@ func GetConfig(configPath string) (*Config, error) {
 	casbinPostgresPassword := os.Getenv("CASBIN_PGPASSWORD")
 	if len(casbinPostgresPassword) > 0 {
 		cfg.Casbin.PostgresPassword = casbinPostgresPassword
+	}
+
+	casbinPostgresTZ := os.Getenv("CASBIN_PGTZ")
+	if len(casbinPostgresTZ) > 0 {
+		cfg.Casbin.PostgresTZ = casbinPostgresTZ
 	}
 
 	casbinURL := os.Getenv("CASBIN_URL")

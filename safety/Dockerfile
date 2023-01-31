@@ -20,6 +20,8 @@ FROM alpine:latest
 
 WORKDIR /
 
+RUN apk update && apk add bash && apk --no-cache add tzdata
+
 COPY --from=build ./grpc-safety/grpc-safety ./grpc-safety
 
 COPY --from=build ./grpc-safety/config/config-local.yml ./config/config-local.yml
