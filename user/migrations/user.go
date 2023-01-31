@@ -18,7 +18,7 @@ func UserServiceMigration(ctx context.Context, logger logger.Logger, db *gorm.DB
 
 	defaultAdmin := models.User{
 		Username: "admin",
-		Email:    "admin@winow.com",
+		Email:    "admin@safety.com",
 		Password: hashedPassword,
 		Role:     "admin",
 		Avatar:   "https://avatars.dicebear.com/api/open-peeps/admin.svg",
@@ -26,7 +26,7 @@ func UserServiceMigration(ctx context.Context, logger logger.Logger, db *gorm.DB
 	}
 
 	u := db.WithContext(ctx).
-		Where(models.User{Email: "admin@winow.com"}).
+		Where(models.User{Email: "admin@safety.com"}).
 		FirstOrCreate(&defaultAdmin)
 	if u.Error != nil {
 		logger.Warnf("Default admin already existed err: %v", u.Error)

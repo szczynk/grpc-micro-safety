@@ -27,7 +27,7 @@ CREATE UNIQUE INDEX "idx_users_username" ON "public"."users" ("username");
 -- create index "idx_users_verification_code" to table: "users"
 CREATE INDEX "idx_users_verification_code" ON "public"."users" ("verification_code");
 -- insert default admin into table: "users"
-INSERT INTO "public"."users" ("id","username","email","password","role","avatar","verification_code","verified","verified_at","password_reset_token","password_reset_at","otp_enabled","otp_verified","otp_secret","otp_auth_url","created_at","updated_at","deleted_at") VALUES ('028de3d9-2f46-4cb2-92f0-2ca723e31862','admin','admin@winow.com','$2a$10$/OVnD8CSq1lCFjPruuLqcu.99wuJsj/fsGw3GZbeWJ2GyLlPykpzK','admin','https://avatars.dicebear.com/api/open-peeps/admin.svg','',true,NULL,'',NULL,false,false,'','','2023-01-20 11:32:59.391','2023-01-20 11:32:59.391',NULL) RETURNING "id";
+INSERT INTO "public"."users" ("id","username","email","password","role","avatar","verification_code","verified","verified_at","password_reset_token","password_reset_at","otp_enabled","otp_verified","otp_secret","otp_auth_url","created_at","updated_at","deleted_at") VALUES ('028de3d9-2f46-4cb2-92f0-2ca723e31862','admin','admin@safety.com','$2a$10$/OVnD8CSq1lCFjPruuLqcu.99wuJsj/fsGw3GZbeWJ2GyLlPykpzK','admin','https://avatars.dicebear.com/api/open-peeps/admin.svg','',true,NULL,'',NULL,false,false,'','','2023-01-20 11:32:59.391','2023-01-20 11:32:59.391',NULL) RETURNING "id";
 -- insert roles into table: "roles"
 INSERT INTO "public"."roles" ("created_at","updated_at","deleted_at","role") VALUES ('2023-01-20 11:32:59.413','2023-01-20 11:32:59.413',NULL,'user'),('2023-01-20 11:32:59.413','2023-01-20 11:32:59.413',NULL,'admin') RETURNING "id";
 -- insert account services into table: "services"
