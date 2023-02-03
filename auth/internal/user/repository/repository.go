@@ -8,6 +8,7 @@ import (
 
 	"github.com/opentracing/opentracing-go"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // User repository
@@ -38,7 +39,8 @@ func (ur *userRepo) UpdateByEmail(ctx context.Context, email string, updates map
 	defer span.Finish()
 
 	user := new(models.User)
-	err := ur.db.WithContext(ctx).Model(&user).Where("email = ?", email).Updates(updates).Error
+	err := ur.db.WithContext(ctx).Model(&user).Clauses(clause.Returning{}).
+		Where("email = ?", email).Updates(updates).Error
 	if err != nil {
 		return nil, err
 	}

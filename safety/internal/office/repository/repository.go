@@ -9,6 +9,7 @@ import (
 
 	"github.com/opentracing/opentracing-go"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // Office repository
@@ -39,7 +40,8 @@ func (ur *officeRepo) UpdateByID(ctx context.Context, ID uint32, updates models.
 	defer span.Finish()
 
 	office := new(models.Office)
-	err := ur.db.WithContext(ctx).Model(&office).Where("id = ?", ID).Updates(updates).Error
+	err := ur.db.WithContext(ctx).Model(&office).Clauses(clause.Returning{}).
+		Where("id = ?", ID).Updates(updates).Error
 	if err != nil {
 		return nil, err
 	}

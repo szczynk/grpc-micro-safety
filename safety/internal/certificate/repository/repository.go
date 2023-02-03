@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/opentracing/opentracing-go"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // Certificate repository
@@ -40,7 +41,8 @@ func (ur *certificateRepo) UpdateByID(ctx context.Context, ID uint32, updates mo
 	defer span.Finish()
 
 	certificate := new(models.Certificate)
-	err := ur.db.WithContext(ctx).Model(&certificate).Where("id = ?", ID).Updates(updates).Error
+	err := ur.db.WithContext(ctx).Model(&certificate).Clauses(clause.Returning{}).
+		Where("id = ?", ID).Updates(updates).Error
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +119,7 @@ func (ur *certificateRepo) CountByUserID(ctx context.Context, userId uuid.UUID) 
 	var count int64
 
 	result := ur.db.WithContext(ctx).Table("certificates").
-		Where("status = approved").
+		Where("status = 'approved'").
 		Where("user_id = ?", userId).
 		Count(&count)
 

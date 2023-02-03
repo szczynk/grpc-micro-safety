@@ -9,6 +9,7 @@ import (
 
 	"github.com/opentracing/opentracing-go"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // Schedule repository
@@ -36,7 +37,7 @@ func (ur *scheduleRepo) CreateSchedule(ctx context.Context, schedule *models.Cre
 		return err
 	}
 
-	start := time.Date(year, month, day, 0, 0, 0, 0, gmt)
+	start := time.Date(year, month, day, 9, 0, 0, 0, gmt)
 	end := start.AddDate(0, 1, 0)
 	diffInDays := int(end.Sub(start).Hours() / 24)
 
@@ -67,7 +68,8 @@ func (ur *scheduleRepo) UpdateByID(ctx context.Context, ID uint32, updates model
 	defer span.Finish()
 
 	schedule := new(models.Schedule)
-	err := ur.db.WithContext(ctx).Model(&schedule).Where("id = ?", ID).Updates(updates).Error
+	err := ur.db.WithContext(ctx).Model(&schedule).Clauses(clause.Returning{}).
+		Where("id = ?", ID).Updates(updates).Error
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,6 @@
 # credit: https://github.com/stefanprodan/dockprom
 # credit: https://github.com/streamthoughts/kafka-monitoring-stack-docker-compose
-version: '2.1'
+version: "3.9"
 
 networks:
   safety-net:
@@ -10,6 +10,7 @@ volumes:
   alertmanager_data:
   prometheus_data:
   grafana_data:
+
 
 services:
   prometheus:
@@ -30,6 +31,34 @@ services:
       - 9090
     networks:
       - safety-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
+    labels:
+      org.label-schema.group: "monitoring"
+
+  jmx-kafka1:
+    image: "sscaling/jmx-prometheus-exporter"
+    container_name: jmx-kafka1
+    expose:
+      - 5556
+    networks:
+      - safety-net
+    environment:
+      CONFIG_YML: "/etc/jmx_exporter/config.yml"
+      JVM_OPTS: "-Xmx128M"
+    volumes:
+      - ./jmx_exporter/config_kafka1.yml:/etc/jmx_exporter/config.yml
+    depends_on:
+      kafka1:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.3'
     labels:
       org.label-schema.group: "monitoring"
 
@@ -47,6 +76,11 @@ services:
       - 9093
     networks:
       - safety-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
     labels:
       org.label-schema.group: "monitoring"
 
@@ -67,6 +101,11 @@ services:
       - 9100
     networks:
       - safety-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
     labels:
       org.label-schema.group: "monitoring"
 
@@ -81,12 +120,17 @@ services:
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker:/var/lib/docker:ro
-      #- /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
+      - /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
     restart: unless-stopped
     expose:
       - 8080
     networks:
       - safety-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.3'
     labels:
       org.label-schema.group: "monitoring"
 
@@ -106,6 +150,11 @@ services:
       - 3000
     networks:
       - safety-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
     labels:
       org.label-schema.group: "monitoring"
 
@@ -117,6 +166,11 @@ services:
       - 9091
     networks:
       - safety-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
     labels:
       org.label-schema.group: "monitoring"
 
@@ -138,5 +192,10 @@ services:
     restart: unless-stopped
     networks:
       - safety-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
     labels:
       org.label-schema.group: "monitoring"

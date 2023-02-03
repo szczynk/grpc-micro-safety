@@ -70,7 +70,7 @@ func (u *attendancesService) CreateAttendance(ctx context.Context, r *pb.CreateA
 	certificate, err := u.certificateUC.CountByUserID(ctx, parsedUserID, u.cfg.Cache.Expire)
 	if err != nil {
 		u.logger.Errorf("certificateUC.CountByUserID: %v", err)
-		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "CountByUserID: %v", err)
+		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "The vaccine certificate that has been input has not been approved by the admin; please wait.")
 	}
 	if certificate < 3 {
 		u.logger.Error("The number of approved vaccine certificates is less than three.")
@@ -108,17 +108,16 @@ func (u *attendancesService) UpdateAttendanceById(ctx context.Context, r *pb.Upd
 	defer span.Finish()
 
 	attendanceId := r.GetId()
-	scheduleId := r.GetScheduleId()
 	attendanceStatus := r.GetStatus()
 
-	_, err := u.attendanceUC.FindByID(ctx, attendanceId, u.cfg.Cache.Expire)
+	attendance, err := u.attendanceUC.FindByID(ctx, attendanceId, u.cfg.Cache.Expire)
 	if err != nil {
 		u.logger.Errorf("attendanceUC.FindByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "attendanceUC.FindByID: %v", err)
 	}
 
 	// TODO(Bagus): check capacity by scheduleId
-	schedule, err := u.scheduleUC.FindByID(ctx, scheduleId, u.cfg.Cache.Expire)
+	schedule, err := u.scheduleUC.FindByID(ctx, attendance.ScheduleID, u.cfg.Cache.Expire)
 	if err != nil {
 		u.logger.Errorf("scheduleUC.FindByID: %v", err)
 		return nil, status.Errorf(grpc_errors.ParseGRPCErrStatusCode(err), "scheduleUC.FindByID: %v", err)
@@ -130,8 +129,8 @@ func (u *attendancesService) UpdateAttendanceById(ctx context.Context, r *pb.Upd
 	}
 
 	// TODO(Bagus): increment if status == "approved"
-	if attendanceStatus == "status" {
-		_, err = u.scheduleUC.UpdateByID(ctx, scheduleId, models.Schedule{
+	if attendanceStatus == "approved" {
+		_, err = u.scheduleUC.UpdateByID(ctx, attendance.ScheduleID, models.Schedule{
 			Capacity: schedule.Capacity + 1,
 		})
 		if err != nil {

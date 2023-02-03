@@ -236,6 +236,7 @@ func (u *certificatesService) CertificateModelToProto(certificate *models.Certif
 	return &pb.Certificate{
 		Id:            uint32(certificate.ID),
 		UserId:        certificate.UserID.String(),
+		Dose:          certificate.Dose,
 		ImageUrl:      certificate.ImageUrl,
 		Description:   certificate.Description,
 		AdminUsername: certificate.AdminUsername,
@@ -253,6 +254,7 @@ func (u *certificatesService) CertificateDetailToProto(certificate *models.Certi
 		UserId:        certificate.UserID.String(),
 		UserUsername:  certificate.UserUsername,
 		UserAvatar:    certificate.UserAvatar,
+		Dose:          certificate.Dose,
 		ImageUrl:      certificate.ImageUrl,
 		Description:   certificate.Description,
 		AdminUsername: certificate.AdminUsername,

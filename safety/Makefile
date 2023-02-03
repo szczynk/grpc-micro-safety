@@ -9,7 +9,7 @@ proto:
 	--go_out=pb --go_opt=paths=source_relative \
 	--validate_out=pb --validate_opt=lang=go,paths=source_relative \
 	--go-grpc_out=pb --go-grpc_opt=paths=source_relative \
-	--grpc-core_out=pb --grpc-core_opt=paths=source_relative,logtostderr=true \
+	--grpc-gateway_out=pb --grpc-gateway_opt=paths=source_relative,logtostderr=true \
 	--openapiv2_out=doc/swagger --openapiv2_opt=allow_merge=true,merge_file_name=safety,logtostderr=true \
 	proto/*.proto
 

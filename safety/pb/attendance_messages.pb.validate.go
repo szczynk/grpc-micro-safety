@@ -914,17 +914,6 @@ func (m *UpdateAttendanceByIdRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.GetScheduleId() <= 0 {
-		err := UpdateAttendanceByIdRequestValidationError{
-			field:  "ScheduleId",
-			reason: "value must be greater than 0",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if utf8.RuneCountInString(m.GetAdminUsername()) < 3 {
 		err := UpdateAttendanceByIdRequestValidationError{
 			field:  "AdminUsername",

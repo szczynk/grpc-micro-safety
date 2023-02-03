@@ -127,10 +127,6 @@ message UpdateAttendanceByIdRequest{
     (validate.rules).uint32.gt = 0,
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
   ];
-  uint32 schedule_id = 2 [
-    (validate.rules).uint32.gt = 0,
-    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"1\""}
-  ];
   string admin_username = 3 [
     (validate.rules).string.min_len = 3,
     (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {example: "\"admin\""}

@@ -10,8 +10,7 @@ proto:
 	--validate_out=pb --validate_opt=lang=go,paths=source_relative \
 	--go-grpc_out=pb --go-grpc_opt=paths=source_relative \
 	--grpc-gateway_out=pb --grpc-gateway_opt=paths=source_relative,logtostderr=true \
-	--openapiv2_out=doc/swagger --openapiv2_opt=allow_merge=true,merge_file_name=	--openapiv2_out=doc/swagger --openapiv2_opt=allow_merge=true,merge_file_name=gateway-without-imgs,logtostderr=true \
-,logtostderr=true \
+	--openapiv2_out=doc/swagger --openapiv2_opt=allow_merge=true,merge_file_name=gateway-without-imgs,logtostderr=true \
 	proto/*.proto
 
 # ==============================================================================

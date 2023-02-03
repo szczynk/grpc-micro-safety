@@ -11,6 +11,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/opentracing/opentracing-go"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // User repository
@@ -41,7 +42,8 @@ func (ur *userRepo) UpdateByID(ctx context.Context, ID uuid.UUID, updates models
 	defer span.Finish()
 
 	user := new(models.User)
-	err := ur.db.WithContext(ctx).Model(&user).Where("id = ?", ID.String()).Updates(updates).Error
+	err := ur.db.WithContext(ctx).Model(&user).Clauses(clause.Returning{}).
+		Where("id = ?", ID.String()).Updates(updates).Error
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +56,8 @@ func (ur *userRepo) UpdateByEmail(ctx context.Context, email string, updates map
 	defer span.Finish()
 
 	user := new(models.User)
-	err := ur.db.WithContext(ctx).Model(&user).Where("email = ?", email).Updates(updates).Error
+	err := ur.db.WithContext(ctx).Model(&user).Clauses(clause.Returning{}).
+		Where("email = ?", email).Updates(updates).Error
 	if err != nil {
 		return nil, err
 	}

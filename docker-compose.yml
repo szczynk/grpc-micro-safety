@@ -63,6 +63,11 @@ services:
         condition: service_started
       grpc-safety_core:
         condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
 
   grpc-safety_auth:
     image: szczynk/grpc-safety_auth
@@ -96,6 +101,11 @@ services:
         condition: service_healthy
       kafka1:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
 
   grpc-safety_user:
     image: szczynk/grpc-safety_user
@@ -129,6 +139,11 @@ services:
         condition: service_healthy
       kafka1:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
 
   grpc-safety_mail:
     image: szczynk/grpc-safety_mail
@@ -160,6 +175,11 @@ services:
         condition: service_started
       kafka1:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
 
   grpc-safety_core:
     image: szczynk/grpc-safety_core
@@ -192,8 +212,14 @@ services:
         condition: service_healthy
       kafka1:
         condition: service_healthy
-  # =============================================================================
-  # =============================================================================
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.2'
+
+  # #############################################################################
+  # #############################################################################
   postgres1:
     image: szczynk/postgres_cron:15.1
     container_name: postgres1
@@ -418,27 +444,6 @@ services:
           memory: 512M
           cpus: '0.3'
 
-  jmx-kafka1:
-    image: "sscaling/jmx-prometheus-exporter"
-    container_name: jmx-kafka1
-    expose:
-      - 5556
-    networks:
-      - safety-net
-    environment:
-      CONFIG_YML: "/etc/jmx_exporter/config.yml"
-      JVM_OPTS: "-Xmx128M"
-    volumes:
-      - ./jmx_exporter/config_kafka1.yml:/etc/jmx_exporter/config.yml
-    depends_on:
-      kafka1:
-        condition: service_healthy
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.3'
-
   minio:
     image: minio/minio:latest
     container_name: minio
@@ -548,6 +553,29 @@ services:
     labels:
       org.label-schema.group: "monitoring"
 
+  jmx-kafka1:
+    image: "sscaling/jmx-prometheus-exporter"
+    container_name: jmx-kafka1
+    expose:
+      - 5556
+    networks:
+      - safety-net
+    environment:
+      CONFIG_YML: "/etc/jmx_exporter/config.yml"
+      JVM_OPTS: "-Xmx128M"
+    volumes:
+      - ./jmx_exporter/config_kafka1.yml:/etc/jmx_exporter/config.yml
+    depends_on:
+      kafka1:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.3'
+    labels:
+      org.label-schema.group: "monitoring"
+
   alertmanager:
     image: prom/alertmanager:v0.25.0
     container_name: alertmanager
@@ -606,7 +634,7 @@ services:
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker:/var/lib/docker:ro
-      #- /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
+      - /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
     restart: unless-stopped
     expose:
       - 8080

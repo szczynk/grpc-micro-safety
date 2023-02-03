@@ -9,6 +9,7 @@ import (
 
 	"github.com/opentracing/opentracing-go"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // Attendance repository
@@ -39,7 +40,8 @@ func (ur *attendanceRepo) UpdateByID(ctx context.Context, ID uint32, updates mod
 	defer span.Finish()
 
 	attendance := new(models.Attendance)
-	err := ur.db.WithContext(ctx).Model(&attendance).Where("id = ?", ID).Updates(updates).Error
+	err := ur.db.WithContext(ctx).Model(&attendance).Clauses(clause.Returning{}).
+		Where("id = ?", ID).Updates(updates).Error
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +109,7 @@ func (ur *attendanceRepo) FindByID(ctx context.Context, ID uint32) (*models.Atte
 		Joins("JOIN schedules ON attendances.schedule_id = schedules.id").
 		Joins("JOIN offices ON schedules.office_id = offices.id").
 		Joins("JOIN users ON attendances.user_id = users.id").
-		First(&attendance, "id = ?", ID).Error
+		First(&attendance, "attendances.id = ?", ID).Error
 	if err != nil {
 		return nil, err
 	}
@@ -162,7 +164,7 @@ func (ur *attendanceRepo) FindCheckByID(ctx context.Context, ID uint32) (*models
 		Joins("JOIN offices ON schedules.office_id = offices.id").
 		Joins("JOIN users ON attendances.user_id = users.id").
 		Where("attendances.check_in IS NOT null AND attendances.check_out IS NOT null").
-		First(&attendance, "id = ?", ID).Error
+		First(&attendance, "attendances.id = ?", ID).Error
 	if err != nil {
 		return nil, err
 	}
