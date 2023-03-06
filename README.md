@@ -38,15 +38,11 @@
 
 ## Description
 
-Welcome abroad!
+Welcome to Work-From-Office Request and Confirmation App!
 
-This is an app to simulate a work-from-office (WFO) request and confirmation application for a company under the new normal covid-19 safety protocols.
+This application is designed to facilitate work-from-office (WFO) requests and confirmations for companies operating under new normal Covid-19 safety protocols. It was developed to help employees stay connected with their colleagues and maintain a sense of community while adhering to new safety guidelines.
 
-This app was developed in an effort to assist employees who missed social interaction and connection with colleagues, as well as the traditional office environment, while adhering to the new normal safety protocols.
-
-This repository was created as a learning process for backend apps that use microservice architecture and containerized REST and gRPC services written in Go.
-
-While building this app, there are challenges that need to be solved, such as implementing queries that join data that is now in multiple databases and enforcing RBAC in distributed services.
+This repository was created as a learning resource for building backend applications using microservice architecture and containerized REST and gRPC services written in Go. During the development of this application, a number of challenges were encountered, such as implementing queries that join data across multiple databases and enforcing Role-Based Access Control (RBAC) in distributed services. These challenges were addressed through careful design and development, and the resulting application serves as an excellent example of how to implement a robust and scalable backend architecture.
 
 <p align="right">(<a href="#table-of-contents">back to top</a>)</p>
 
